@@ -1,6 +1,9 @@
 //just has function for gf multiplication so far
-public class AES{
-	public static void main(String[] args){
+
+public class AES
+{
+	public static void main(String[] args)
+	{
 		int a = 9;
 		int b = 9;
 		int p = 0;
