@@ -1,3 +1,4 @@
+//just has function for gf multiplication so far
 public class AES{
 	public static void main(String[] args){
 		int a = 9;
