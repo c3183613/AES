@@ -1,2 +1,3 @@
 # COMP3260A2
 JLaw and COdonnell
+Writing this stuff in README to practice using git...
