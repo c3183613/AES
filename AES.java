@@ -1,6 +1,5 @@
 //just has function for gf multiplication so far
-
-public class AES
+public class AES<T>
 {
 	static int[][] rCon={	
 							{1,0,0,0},
@@ -143,5 +142,4 @@ public class AES
 		wordOut[3] = temp;
 		return wordOut;
 	}
-
 }
