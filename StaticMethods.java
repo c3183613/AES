@@ -1,8 +1,8 @@
 import java.util.List;
 public abstract class StaticMethods
 {
-	// Takes two dimension array and turns it into one dimensional array
-	public static <T> T[] arrayMultiToOne(T[][] arrayParam)
+	// intakes two dimension array and turns it into one dimensional array
+	public static int[] arrayMultiToOne(int[][] arrayParam)
 	{
 		int atIndex = 0;
 		int length = arrayParam.length;
@@ -16,23 +16,24 @@ public abstract class StaticMethods
 			}
 		}
 		@SuppressWarnings("unchecked")
-		T[] returnArray =(T[]) new Object[size];
+		int[] returnArray = new int[size];
 		for(int i=0; i<length; i++)
 		{
 			int innerlength = arrayParam[i].length;
 			for(int j=0; j<innerlength;j++)
 			{
-				returnArray[size] = arrayParam[i][j];
+				returnArray[atIndex] =  arrayParam[i][j];
+				atIndex++;
 			}
 		}
 		return returnArray;
 	}
 
 	// 
-	public static <T> T[][] arrayOneToMulti(T[] arrayParam, int size1, int size2)
+	public static  int[][] arrayOneToMulti(int[] arrayParam, int size1, int size2)
 	{
 		@SuppressWarnings("unchecked")
-		T[][] returnArray = (T[][]) new Object[size1][size2];
+		int[][] returnArray = new int[size1][size2];
 		return returnArray;
 	}
 }
