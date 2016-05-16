@@ -53,7 +53,22 @@ public class CAlgos{
 
 	public static void main(String[] args)
 	{
-
+		int[][] test = new int[4][4];
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j<4; j++) {
+				test[i][j] = input[i][j];
+				System.out.print(Integer.toHexString(test[i][j]) + " ");
+			}
+			System.out.println();
+		}
+		System.out.println();
+		test = subBytes(test);
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j<4; j++) {
+				System.out.print(Integer.toHexString(test[i][j]) + " ");
+			}
+			System.out.println();
+		}
 	}
 
 	public static int subByte(int byteIn)
@@ -63,4 +78,19 @@ public class CAlgos{
 		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
 		return sBox[r][c];
 	}
+
+	public static int[][] subBytes(int[][] bytesIn){
+		int[][] bytesOut = new int[4][4];
+		for(int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				bytesOut[i][j] = subByte(bytesIn[i][j]);
+			}
+		}
+		return bytesOut;
+	}
+
+	
+
 }
