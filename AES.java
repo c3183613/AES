@@ -179,7 +179,7 @@ public class AES<T>
 		}
 	}
 
-	public static int subBytes(int byteIn)
+	public static int subByte(int byteIn)
 	{
 		String byteToHex = String.format("%02X", byteIn);
 		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
@@ -193,7 +193,7 @@ public class AES<T>
 		for(int i = 0; i < 4; i++)
 		{
 			wordOut[i] = wordIn[i];
-			wordOut[i] = subBytes(wordOut[i]);
+			wordOut[i] = subByte(wordOut[i]);
 		}
 		return wordOut;
 	}

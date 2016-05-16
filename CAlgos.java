@@ -55,4 +55,12 @@ public class CAlgos{
 	{
 
 	}
+
+	public static int subByte(int byteIn)
+	{
+		String byteToHex = String.format("%02X", byteIn);
+		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
+		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
+		return sBox[r][c];
+	}
 }
