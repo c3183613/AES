@@ -224,7 +224,8 @@ public class AES<T>
 		return output;
 	}
 
-	public static int[][] subBytes(int[][] bytesIn){
+	public static int[][] subBytes(int[][] bytesIn)
+	{
 		int[][] bytesOut = new int[4][4];
 		for(int i = 0; i < 4; i++)
 		{
@@ -235,5 +236,4 @@ public class AES<T>
 		}
 		return bytesOut;
 	}
-
 }
