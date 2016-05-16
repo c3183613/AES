@@ -166,40 +166,6 @@ public class AES<T>
 		return wordOut;
 	}
 
-	public static int[] rotWordLeft(int[] wordIn)
-	{
-		int[] wordOut = wordIn;
-		int temp = wordOut[3];
-		for(int i = 3;i>0;i--)
-		{
-			wordOut[i] = wordOut[i-1];
-		}
-		wordOut[0] = temp;
-		return wordOut;
-	}
-
-	// // shift to left
-	// // assumes input is square array
-	// public static int[][] shiftRows(int[][] input)
-	// {
-	// 	int[[] returnArray = new int[input.length][input[0].length];
-	// 	// first row is untouched
-	// 	for(int i=0;i<4;i++)
-	// 	{
-	// 		returnArray[0][i] = input[0][i];
-	// 	}
-	// 	// row 2 shift by 1
-	// 	int temp = input[1][input[1].length-1];
-	// 	for(int i=input[1].length-1;i>0;i++)
-	// 	{
-	// 		returnArray[1][i] = input[1][i-1];
-	// 	}
-	// 	returnArray[1][0] = temp;
-	// 	// row 3 shift by 2
-	// 	returnArray[2][3] = input
-	// 	//row 4 shift by 3
-	// }
-
 	public static int subBytes(int byteIn)
 	{
 		String byteToHex = Integer.toHexString(byteIn);
