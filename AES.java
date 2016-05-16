@@ -147,13 +147,6 @@ public class AES<T>
 		return output;
 	}
 
-
-	public static int[][] keyExpansion(int[][] keyIn)
-	{
-		int[][] boop = {{1}};
-		return boop;
-	}
-
 	public static int[] rotWord(int[] wordIn)
 	{
 		int[] wordOut = wordIn;
@@ -199,22 +192,4 @@ public class AES<T>
 	// 	returnArray[2][3] = input
 	// 	//row 4 shift by 3
 	// }
-
-	public static int subBytes(int byteIn)
-	{
-		String byteToHex = String.format("%02X", byteIn);
-		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
-		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
-		return sBox[r][c];
-	}
-
-	public static int[] subWord(int[] wordIn)
-	{
-		int[] wordOut = wordIn;
-		for(int i = 0; i < 4; i++)
-		{
-			wordOut[i] = subBytes(wordOut[i]);
-		}
-		return wordOut;
-	}
 }
