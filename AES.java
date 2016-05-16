@@ -1,6 +1,7 @@
 //just has function for gf multiplication so far
 public class AES<T>
 {
+	static ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
 	static int[][] sBox = 	{
 								{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
 								{0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0},
@@ -147,16 +148,35 @@ public class AES<T>
 		return output;
 	}
 
-	public static int[] rotWord(int[] wordIn)
+	public static void keyExpansion()
 	{
-		int[] wordOut = wordIn;
-		int temp = wordOut[0];
-		for(int i = 0;i<3;i++)
-		{
-			wordOut[i] = wordOut[i+1];
+		for(int j = 0; j < 10; j++){
+			int[] newFirstWord = new int[4];
+			int[] newSecondWord = new int[4];
+			int[] newThirdWord = new int[4];
+			int[] newFourthWord = new int[4];
+			int[] oldFourthWord = new int[4];
+			int[] oldFirstWord = new int[4];
+			int[] oldSecondWord = new int[4];
+			int[] oldThirdWord = new int[4];
+			for(int i = 0; i<4; i++)
+			{
+				oldFirstWord[i] = keyShedule.get(j)[0][i];
+				oldSecondWord[i] = keyShedule.get(j)[1][i];
+				oldThirdWord[i] = keyShedule.get(j)[2][i];
+				oldFourthWord[i] = keyShedule.get(j)[3][i];
+			}
+			newFirstWord = rotWord(oldFourthWord);
+			newFirstWord = subWord(newFirstWord);
+			newFirstWord = wordXor(newFirstWord, rCon[j]);
+			newFirstWord = wordXor(newFirstWord, oldFirstWord);
+			newSecondWord = wordXor(oldSecondWord, newFirstWord);
+			newThirdWord = wordXor(oldThirdWord, newSecondWord);
+			newFourthWord = wordXor(oldFourthWord, newThirdWord);
+
+			int[][] output = {newFirstWord, newSecondWord, newThirdWord, newFourthWord};
+			keyShedule.add(output);
 		}
-		wordOut[3] = temp;
-		return wordOut;
 	}
 
 	public static int subBytes(int byteIn)
@@ -169,11 +189,39 @@ public class AES<T>
 
 	public static int[] subWord(int[] wordIn)
 	{
-		int[] wordOut = wordIn;
+		int[] wordOut = new int[4];
 		for(int i = 0; i < 4; i++)
 		{
+			wordOut[i] = wordIn[i];
 			wordOut[i] = subBytes(wordOut[i]);
 		}
 		return wordOut;
 	}
+
+	public static int[] rotWord(int[] wordIn)
+	{
+		int[] wordOut = new int[4];
+		int temp = wordIn[0];
+		for(int i = 0; i < 4; i++)
+		{
+			wordOut[i] = wordIn[i];
+		}
+		for(int i = 0;i<3;i++)
+		{
+			wordOut[i] = wordOut[i+1];
+		}
+		wordOut[3] = temp;
+		return wordOut;
+	}
+
+	public static int[] wordXor(int[] wordIn, int[]xoredWith)
+	{
+		int[] output = new int[4];
+		for(int j = 0; j<4; j++)
+		{
+			output[j] = wordIn[j]^xoredWith[j];
+		}
+		return output;
+	}
+
 }
