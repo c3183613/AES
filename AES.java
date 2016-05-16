@@ -202,9 +202,19 @@ public class AES<T>
 
 	public static int subBytes(int byteIn)
 	{
-		String byteToHex = Integer.toHexString(byteIn);
+		String byteToHex = String.format("%02X", byteIn);
 		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
 		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
 		return sBox[r][c];
-	} 
+	}
+
+	public static int[] subWord(int[] wordIn)
+	{
+		int[] wordOut = wordIn;
+		for(int i = 0; i < 4; i++)
+		{
+			wordOut[i] = subBytes(wordOut[i]);
+		}
+		return wordOut;
+	}
 }
