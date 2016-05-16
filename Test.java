@@ -34,5 +34,7 @@ public class Test
 		{
 			System.out.println(e);
 		}
+		System.out.println("[-1][1]");
+		System.out.println(doubleArray[-1][1]);
 	}
 }
