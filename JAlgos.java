@@ -1,15 +1,15 @@
 import java.util.List;
 public abstract class JAlgos
 {
-	public static int[] rotWordLeft(int[] wordIn)
+	public static int[] rotWordRight(int[] wordIn)
 	{
 		int[] wordOut = wordIn;
-		int temp = wordOut[0];
-		for(int i = 0;i<3;i++)
+		int temp = wordOut[3];
+		for(int i = 3;i>0;i--)
 		{
-			wordOut[i] = wordOut[i+1];
+			wordOut[i] = wordOut[i-1];
 		}
-		wordOut[3] = temp;
+		wordOut[0] = temp;
 		return wordOut;
 	}
 
@@ -19,14 +19,28 @@ public abstract class JAlgos
 	{
 		// first row is untouched
 		// row 2 shift by 1
-		rotWordLeft(input[1]);
+		AES.rotWord(input[1]);
 		// row 3 shift by 2
-		rotWordLeft(input[2]);
-		rotWordLeft(input[2]);
+		AES.rotWord(input[2]);
+		AES.rotWord(input[2]);
 		//row 4 shift by 3
-		rotWordLeft(input[3]);
-		rotWordLeft(input[3]);
-		rotWordLeft(input[3]);
+		AES.rotWord(input[3]);
+		AES.rotWord(input[3]);
+		AES.rotWord(input[3]);
+	}
+
+	public static void shiftRowsInv(int[][] input)
+	{
+		// first row is untouched
+		// row 2 shift by 1
+		rotWordRight(input[1]);
+		// row 3 shift by 2
+		rotWordRight(input[2]);
+		rotWordRight(input[2]);
+		//row 4 shift by 3
+		rotWordRight(input[3]);
+		rotWordRight(input[3]);
+		rotWordRight(input[3]);
 	}
 
 	// intakes two dimension array and turns it into one dimensional array

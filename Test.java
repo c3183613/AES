@@ -30,6 +30,19 @@ public class Test
 			s+=doubleArray[i][3] + "}";
 			System.out.println(s);
 		}
+		System.out.println();
+		System.out.println();
+		JAlgos.shiftRowsInv(doubleArray);
+		for(int i=0;i<doubleArray.length;i++)
+		{
+			String s="{";
+			for(int j=0;j<doubleArray[i].length-1;j++)
+			{
+				s+=doubleArray[i][j] +", ";
+			}
+			s+=doubleArray[i][3] + "}";
+			System.out.println(s);
+		}
 	}
 }
 
