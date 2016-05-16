@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class CAlgos{	
 
 	static int[][] sBox = 	{
@@ -32,6 +34,7 @@ public class CAlgos{
 							{54,0,0,0},
 						};
 
+
 	static char[][] key = 	{
 								{'S', ' ', ' ', ' '}, 
 								{'O', '1', 'B', 'K'},
@@ -46,14 +49,57 @@ public class CAlgos{
 								{'A', 'A', 'A', '1'}
 							};
 
+	static ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
+
 	public static void main(String[] args)
 	{
-		
+
+		int[][] firstKey = new int[4][4];
+		for(int i = 0;i<4;i++)
+			for(int j = 0;j<4;j++)
+				firstKey[i][j] = key[j][i];
+		keyShedule.add(firstKey);
+		keyExpansion();
+		for(int[][] key : keyShedule){
+			for(int i = 0;i<4;i++){
+				for(int j = 0;j<4;j++){
+					System.out.print(Integer.toHexString(key[j][i]) + " ");
+				}
+				System.out.println();
+			}
+			System.out.println();			
+		}
 	}
 
-	public static int[][] keyExpansion(int[][] initialKey)
+	public static void keyExpansion()
 	{
+		for(int j = 0; j < 10; j++){
+			int[] newFirstWord = new int[4];
+			int[] newSecondWord = new int[4];
+			int[] newThirdWord = new int[4];
+			int[] newFourthWord = new int[4];
+			int[] oldFourthWord = new int[4];
+			int[] oldFirstWord = new int[4];
+			int[] oldSecondWord = new int[4];
+			int[] oldThirdWord = new int[4];
+			for(int i = 0; i<4; i++)
+			{
+				oldFirstWord[i] = keyShedule.get(j)[0][i];
+				oldSecondWord[i] = keyShedule.get(j)[1][i];
+				oldThirdWord[i] = keyShedule.get(j)[2][i];
+				oldFourthWord[i] = keyShedule.get(j)[3][i];
+			}
+			newFirstWord = rotWord(oldFourthWord);
+			newFirstWord = subWord(newFirstWord);
+			newFirstWord = wordXor(newFirstWord, rCon[j]);
+			newFirstWord = wordXor(newFirstWord, oldFirstWord);
+			newSecondWord = wordXor(oldSecondWord, newFirstWord);
+			newThirdWord = wordXor(oldThirdWord, newSecondWord);
+			newFourthWord = wordXor(oldFourthWord, newThirdWord);
 
+			int[][] output = {newFirstWord, newSecondWord, newThirdWord, newFourthWord};
+			keyShedule.add(output);
+		}
 	}
 
 	public static int subBytes(int byteIn)
@@ -66,9 +112,10 @@ public class CAlgos{
 
 	public static int[] subWord(int[] wordIn)
 	{
-		int[] wordOut = wordIn;
+		int[] wordOut = new int[4];
 		for(int i = 0; i < 4; i++)
 		{
+			wordOut[i] = wordIn[i];
 			wordOut[i] = subBytes(wordOut[i]);
 		}
 		return wordOut;
@@ -76,13 +123,27 @@ public class CAlgos{
 
 	public static int[] rotWord(int[] wordIn)
 	{
-		int[] wordOut = wordIn;
-		int temp = wordOut[0];
+		int[] wordOut = new int[4];
+		int temp = wordIn[0];
+		for(int i = 0; i < 4; i++)
+		{
+			wordOut[i] = wordIn[i];
+		}
 		for(int i = 0;i<3;i++)
 		{
 			wordOut[i] = wordOut[i+1];
 		}
 		wordOut[3] = temp;
 		return wordOut;
+	}
+
+	public static int[] wordXor(int[] wordIn, int[]xoredWith)
+	{
+		int[] output = new int[4];
+		for(int j = 0; j<4; j++)
+		{
+			output[j] = wordIn[j]^xoredWith[j];
+		}
+		return output;
 	}
 }
