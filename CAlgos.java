@@ -51,6 +51,11 @@ public class CAlgos{
 		
 	}
 
+	public static int[][] keyExpansion(int[][] initialKey)
+	{
+
+	}
+
 	public static int subBytes(int byteIn)
 	{
 		String byteToHex = String.format("%02X", byteIn);
@@ -66,6 +71,18 @@ public class CAlgos{
 		{
 			wordOut[i] = subBytes(wordOut[i]);
 		}
+		return wordOut;
+	}
+
+	public static int[] rotWord(int[] wordIn)
+	{
+		int[] wordOut = wordIn;
+		int temp = wordOut[0];
+		for(int i = 0;i<3;i++)
+		{
+			wordOut[i] = wordOut[i+1];
+		}
+		wordOut[3] = temp;
 		return wordOut;
 	}
 }
