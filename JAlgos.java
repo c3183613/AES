@@ -4,24 +4,29 @@ public abstract class JAlgos
 	public static int[] rotWordLeft(int[] wordIn)
 	{
 		int[] wordOut = wordIn;
-		int temp = wordOut[3];
-		for(int i = 3;i>0;i--)
+		int temp = wordOut[0];
+		for(int i = 0;i<3;i++)
 		{
-			wordOut[i] = wordOut[i-1];
+			wordOut[i] = wordOut[i+1];
 		}
-		wordOut[0] = temp;
+		wordOut[3] = temp;
 		return wordOut;
 	}
 
 	// shift to left
-	// assumes input is square array
-	public static int[][] shiftRows(int[][] input)
+	// assumes input has 4 rows
+	public static void shiftRows(int[][] input)
 	{
 		// first row is untouched
 		// row 2 shift by 1
-		rotWordLeft
+		rotWordLeft(input[1]);
 		// row 3 shift by 2
+		rotWordLeft(input[2]);
+		rotWordLeft(input[2]);
 		//row 4 shift by 3
+		rotWordLeft(input[3]);
+		rotWordLeft(input[3]);
+		rotWordLeft(input[3]);
 	}
 
 	// intakes two dimension array and turns it into one dimensional array

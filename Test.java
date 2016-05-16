@@ -2,39 +2,36 @@ public class Test
 {
 	public static void main(String[] args) throws Exception
 	{
-		int[][] doubleArray = {{0,1},{2,3},{4,5}};
-		int[] oneArray = StaticMethods.arrayMultiToOne(doubleArray);
-		System.out.println("double array");
-		for(int i=0; i<doubleArray.length;i++)
+		int[][] doubleArray = {	{0,1,2,3},
+								{4,5,6,7},
+								{8,9,10,11},
+								{12,13,14,15}};
+		for(int i=0;i<doubleArray.length;i++)
 		{
-			for(int j=0;j<doubleArray[i].length;j++)
+			String s="{";
+			for(int j=0;j<doubleArray[i].length-1;j++)
 			{
-				System.out.println(doubleArray[i][j]);
+				s+=doubleArray[i][j] +", ";
 			}
+			s+=doubleArray[i][3];
+			s+="}";
+			System.out.println(s);
 		}
-		System.out.println("one array");
-		for(int i=0;i<oneArray.length;i++)
+		System.out.println();
+		System.out.println();
+		JAlgos.shiftRows(doubleArray);
+		for(int i=0;i<doubleArray.length;i++)
 		{
-			System.out.println(oneArray[i]);
-		}
-		System.out.println("turn into x*x array");
-		try
-		{
-			int[][] newArray = StaticMethods.arrayOneToMulti(oneArray, 0, 2);
-			for(int i=0;i<newArray.length;i++)
+			String s="{";
+			for(int j=0;j<doubleArray[i].length-1;j++)
 			{
-				String s="";
-				for(int j=0;j<newArray[i].length;j++)
-				{
-					s+=newArray[i][j];
-				}
-				System.out.println(s);
+				s+=doubleArray[i][j] +", ";
 			}
-		}catch(Exception e)
-		{
-			System.out.println(e);
+			s+=doubleArray[i][3] + "}";
+			System.out.println(s);
 		}
-		System.out.println("[-1][1]");
-		System.out.println(doubleArray[-1][1]);
 	}
 }
+
+// 8 9 10 11
+// 11 8 9 10

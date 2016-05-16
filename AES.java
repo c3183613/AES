@@ -55,7 +55,7 @@ public class AES<T>
 		rotWord(eheh);
 		for(int i = 0; i<4;i++)
 			System.out.print((char)eheh[i]);
-		rotWordLeft(eheh);
+		JAlgos.rotWordLeft(eheh);
 		System.out.println();
 		for(int i = 0; i<4;i++)
 			System.out.print((char)eheh[i]);
