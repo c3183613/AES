@@ -42,11 +42,18 @@ public class CAlgos{
 								{'E', '8', 'T', 'Y'}
 							};
 
-	static char[][] input = {
+	/*static char[][] input = {
 								{'A', 'C', 'T', 'W'}, 
 								{'T', 'K', ' ', 'N'},
 								{'T', ' ', 'D', '!'}, 
 								{'A', 'A', 'A', '1'}
+							};*/
+
+	static char[][] input = {
+								{0xd4, 0xe0, 0xb8, 0x1e},
+								{0xbf, 0xb4, 0x41, 0x27},
+								{0x5d, 0x52, 0x11, 0x98},
+								{0x30, 0xae, 0xf1, 0xe5}
 							};
 
 	
@@ -62,7 +69,7 @@ public class CAlgos{
 			System.out.println();
 		}
 		System.out.println();
-		test = subBytes(test);
+		test = mixColumns(test);
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j<4; j++) {
 				System.out.print(Integer.toHexString(test[i][j]) + " ");
@@ -91,6 +98,63 @@ public class CAlgos{
 		return bytesOut;
 	}
 
-	
+	public static int[][] mixColumns(int[][] stateIn)
+	{
+		int[][] actualOutput = new int[4][4];
+		int[][] output = new int[4][4];
+		for(int i = 0; i<4; i++) {
+			for (int j = 0; j<4; j++) {
+				output[i][j] = stateIn[i][j];
+			}
+		}
 
+		for(int i = 0; i<4; i++) {
+				actualOutput[0][i] = (peasantsAlgorithm(2, output[0][i])^peasantsAlgorithm(3, output[1][i])^output[2][i]^output[3][i]);
+				actualOutput[1][i] = (output[0][i]^peasantsAlgorithm(2, output[1][i])^peasantsAlgorithm(3, output[2][i])^output[3][i]);
+				actualOutput[2][i] = (output[0][i]^output[1][i]^peasantsAlgorithm(2, output[2][i])^peasantsAlgorithm(3, output[3][i]));
+				actualOutput[3][i] = (peasantsAlgorithm(3, output[0][i])^output[1][i]^output[2][i]^peasantsAlgorithm(2, output[3][i]));
+		}
+		return actualOutput;
+	}
+
+	public static boolean rightMostBitSet(int byteIn)
+	{
+		int bit = (byteIn & 1);
+		return (bit == 1) ? true : false;
+	}
+
+	public static boolean leftMostBitSet(int byteIn)
+	{
+		int bit = (byteIn & 0x80);
+		return (bit == 0x80) ? true : false;
+	}
+
+	public static int peasantsAlgorithm(int aIn, int bIn)
+	{
+		int p = 0, a = aIn, b = bIn;
+		for(int i = 0; i<8; i++)
+		{
+			if(rightMostBitSet(b))
+			{
+				p ^= a;
+			}
+
+			b = b >> 1;
+
+			boolean carry = leftMostBitSet(a);
+
+			a = a << 1;
+
+			if(carry)
+			{
+				a ^= 0x1b;
+			}
+
+			if(a == 0 || b == 0)
+			{
+				break;
+			}
+		}
+		return p & 0xFF;
+	}
 }
