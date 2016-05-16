@@ -159,6 +159,7 @@ public class AES<T>
 		return wordOut;
 	}
 
+<<<<<<< HEAD
 	public static int[] rotWordLeft(int[] wordIn)
 	{
 		int[] wordOut = wordIn;
@@ -192,4 +193,11 @@ public class AES<T>
 	// 	returnArray[2][3] = input
 	// 	//row 4 shift by 3
 	// }
+	public static int subBytes(int byteIn)
+	{
+		String byteToHex = Integer.toHexString(byteIn);
+		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
+		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
+		return sBox[r][c];
+	} 
 }

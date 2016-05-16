@@ -1,6 +1,29 @@
 import java.util.List;
-public abstract class StaticMethods
+public abstract class JAlgos
 {
+	public static int[] rotWordLeft(int[] wordIn)
+	{
+		int[] wordOut = wordIn;
+		int temp = wordOut[3];
+		for(int i = 3;i>0;i--)
+		{
+			wordOut[i] = wordOut[i-1];
+		}
+		wordOut[0] = temp;
+		return wordOut;
+	}
+
+	// shift to left
+	// assumes input is square array
+	public static int[][] shiftRows(int[][] input)
+	{
+		// first row is untouched
+		// row 2 shift by 1
+		rotWordLeft
+		// row 3 shift by 2
+		//row 4 shift by 3
+	}
+
 	// intakes two dimension array and turns it into one dimensional array
 	public static int[] arrayMultiToOne(int[][] arrayParam)
 	{
