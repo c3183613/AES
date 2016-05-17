@@ -3,8 +3,7 @@ import java.util.ArrayList;
 //just has function for gf multiplication so far
 public class AES
 {
-	static ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
-	static int[][] sBox = 	{
+	private static int[][] sBox = 	{
 									{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
 									{0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0},
 									{0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15},
@@ -23,7 +22,7 @@ public class AES
 									{0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16},
 							};
 
-	static int[][] invSBox = 	{
+	private static int[][] invSBox = 	{
 									{0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb},
 									{0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb},
 									{0x54, 0x7b, 0x94, 0x32, 0xa6, 0xc2, 0x23, 0x3d, 0xee, 0x4c, 0x95, 0x0b, 0x42, 0xfa, 0xc3, 0x4e},
@@ -42,7 +41,7 @@ public class AES
 									{0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}
 								};
 
-	static int[][] rCon={	
+	private static int[][] rCon={	
 							{1,0,0,0},
 							{2,0,0,0},
 							{4,0,0,0},
@@ -56,68 +55,23 @@ public class AES
 						};
 
 
-	/*static char[][] key = 	{
+	/*private char[][] key = 	{
 								{'S', ' ', ' ', ' '}, 
 								{'O', '1', 'B', 'K'},
 								{'M', '2', 'I', 'E'}, 
 								{'E', '8', 'T', 'Y'}
 							};*/
 
-	/*static char[][] input = {
+	/*private char[][] input = {
 								{'A', 'C', 'T', 'W'}, 
 								{'T', 'K', ' ', 'N'},
 								{'T', ' ', 'D', '!'}, 
 								{'A', 'A', 'A', '1'}
 							};*/
 
-	static char[][] input = {
-								{0x32, 0x88, 0x31, 0xe0},
-								{0x43, 0x5a, 0x31, 0x37},
-								{0xf6, 0x30, 0x98, 0x07},
-								{0xa8, 0x8d, 0xa2, 0x34}
-							};
 
-	static char[][] key = {
-								{0x2b, 0x28, 0xab, 0x09},
-								{0x7e, 0xae, 0xf7, 0xcf},
-								{0x15, 0xd2, 0x15, 0x4f},
-								{0x16, 0xa6, 0x88, 0x3c}
-							};
 
-	public static void main(String[] args)
-	{
-		int[][] intKey = new int[4][4];
-		for (int i = 0; i<4; i++) {
-			for (int j = 0; j<4; j++) {
-				intKey[i][j] = key[i][j];
-			}	
-		}
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j<4; j++) {
-				System.out.print(String.format("%02X", (int)input[i][j]) + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-		keyShedule.add(intKey);
-		keyExpansion();
-		int[][] output = encrypt(input);
-
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j<4; j++) {
-				System.out.print(String.format("%02X", output[i][j]) + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-		int[][] decrypted = decrypt(output);
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j<4; j++) {
-				System.out.print(String.format("%02X", decrypted[i][j]) + " ");
-			}
-			System.out.println();
-		}
-	}	
+		
 
 	/*********************************************************************
 	 *********************************************************************
@@ -126,8 +80,8 @@ public class AES
 	 *********************************************************************
 	 *********************************************************************/
 
-	public static int[][] encrypt(char[][] in){
-		int[][] preFirstRountState = xorFirstRound(in);
+	public static int[][] encrypt(int[][] in, ArrayList<int[][]> keyShedule){
+		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		for (int i = 0; i<9; i++) {
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = shiftRows(preFirstRountState);
@@ -148,7 +102,7 @@ public class AES
 	 *********************************************************************
 	 *********************************************************************/
 
-	public static int[][] decrypt(int[][] in){
+	public static int[][] decrypt(int[][] in, ArrayList<int[][]> keyShedule){
 		int[][] encryptedData = xor(in, keyShedule.get(10));
 		for (int i = 9; i>0; i--) {
 			encryptedData = invShiftRows(encryptedData);
@@ -163,9 +117,9 @@ public class AES
 
 		return encryptedData;
 	}
-
-	public static int[][] AES1(char[][] in){
-		int[][] preFirstRountState = xorFirstRound(in);
+/*
+	public int[][] AES1(char[][] in){
+		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		for (int i = 0; i<9; i++) {
 			preFirstRountState = shiftRows(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
@@ -177,8 +131,8 @@ public class AES
 		return preFirstRountState;
 	}
 
-	public static int[][] AES2(char[][] in){
-		int[][] preFirstRountState = xorFirstRound(in);
+	public int[][] AES2(char[][] in){
+		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		for (int i = 0; i<9; i++) {
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
@@ -190,8 +144,8 @@ public class AES
 		return preFirstRountState;
 	}
 
-	public static int[][] AES3(char[][] in){
-		int[][] preFirstRountState = xorFirstRound(in);
+	public int[][] AES3(char[][] in){
+		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		for (int i = 0; i<9; i++) {
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = shiftRows(preFirstRountState);
@@ -204,7 +158,7 @@ public class AES
 		return preFirstRountState;
 	}
 
-	public static int[][] AES4(char[][] in){
+	public int[][] AES4(char[][] in){
 		int[][] preFirstRountState = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j = 0; j<4; j++) {
@@ -220,7 +174,7 @@ public class AES
 		preFirstRountState = shiftRows(preFirstRountState);
 
 		return preFirstRountState;
-	}
+	} */
 
 	/*********************************************************************
 	 *********************************************************************
@@ -338,7 +292,7 @@ public class AES
 		return output;
 	}
 
-	public static int[][] xorFirstRound(char[][] currentRoundInputIn)
+	/*public int[][] xorFirstRound(char[][] currentRoundInputIn)
 	{
 		char[][] current = currentRoundInputIn;
 		int[][] output = new int[4][4];
@@ -350,7 +304,7 @@ public class AES
 			}
 		}
 		return output;
-	}
+	}*/
 
 	public static int[] wordXor(int[] wordIn, int[]xoredWith)
 	{
@@ -369,8 +323,10 @@ public class AES
 	 *********************************************************************
 	 *********************************************************************/
 
-	public static void keyExpansion()
+	public static ArrayList<int[][]> keyExpansion(int[][] key)
 	{
+		ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
+		keyShedule.add(key);
 		for(int j = 0; j < 10; j++){
 			int[] newFirstWord = new int[4];
 			int[] newSecondWord = new int[4];
@@ -404,6 +360,7 @@ public class AES
 
 			keyShedule.add(output);
 		}
+		return keyShedule;
 	}
 
 	/*********************************************************************
