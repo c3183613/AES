@@ -121,6 +121,13 @@ public class CAlgos{
 
 	}
 
+	/*********************************************************************
+	 *********************************************************************
+	 Encrypt performs the encryption of a given input based on a given key
+	 and the 10 round expansion of that key.
+	 *********************************************************************
+	 *********************************************************************/
+
 	public static int[][] encrypt(char[][] in){
 		int[][] preFirstRountState = xorFirstRound(in);
 		for (int i = 0; i<9; i++) {
@@ -136,6 +143,13 @@ public class CAlgos{
 
 		return preFirstRountState;
 	}
+
+	/*********************************************************************
+	 *********************************************************************
+	 Decrypt performs the decryption of a given input based on a given key
+	 and the 10 round expansion of that key.
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static int[][] decrypt(int[][] in){
 		int[][] encryptedData = xor(in, keyShedule.get(10));
@@ -153,25 +167,12 @@ public class CAlgos{
 		return encryptedData;
 	}
 
-	public static int subByte(int byteIn)
-	{
-		String byteToHex = String.format("%02X", byteIn);
-		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
-		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
-		return sBox[r][c];
-	}
-
-	public static int[][] subBytes(int[][] bytesIn){
-		int[][] bytesOut = new int[4][4];
-		for(int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				bytesOut[i][j] = subByte(bytesIn[i][j]);
-			}
-		}
-		return bytesOut;
-	}
+	/*********************************************************************
+	 *********************************************************************
+	 mixColumns performs a matrix multiplication on a 2-d 16 byte array
+	 to perform the mix columns step. invMixColumns undoes mixColumns
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static int[][] mixColumns(int[][] stateIn)
 	{
@@ -192,17 +193,31 @@ public class CAlgos{
 		return actualOutput;
 	}
 
-	public static boolean rightMostBitSet(int byteIn)
+	public static int[][] invMixColumns(int[][] stateIn)
 	{
-		int bit = (byteIn & 1);
-		return (bit == 1) ? true : false;
+		int[][] actualOutput = new int[4][4];
+		int[][] output = new int[4][4];
+		for(int i = 0; i<4; i++) {
+			for (int j = 0; j<4; j++) {
+				output[i][j] = stateIn[i][j];
+			}
+		}
+
+		for(int i = 0; i<4; i++) {
+				actualOutput[0][i] = (peasantsAlgorithm(0x0e, output[0][i])^peasantsAlgorithm(0x0b, output[1][i])^peasantsAlgorithm(0x0d, output[2][i])^peasantsAlgorithm(0x09, output[3][i]));
+				actualOutput[1][i] = (peasantsAlgorithm(0x09, output[0][i])^peasantsAlgorithm(0x0e, output[1][i])^peasantsAlgorithm(0x0b, output[2][i])^peasantsAlgorithm(0x0d, output[3][i]));
+				actualOutput[2][i] = (peasantsAlgorithm(0x0d, output[0][i])^peasantsAlgorithm(0x09, output[1][i])^peasantsAlgorithm(0x0e, output[2][i])^peasantsAlgorithm(0x0b, output[3][i]));
+				actualOutput[3][i] = (peasantsAlgorithm(0x0b, output[0][i])^peasantsAlgorithm(0x0d, output[1][i])^peasantsAlgorithm(0x09, output[2][i])^peasantsAlgorithm(0x0e, output[3][i]));
+		}
+		return actualOutput;
 	}
 
-	public static boolean leftMostBitSet(int byteIn)
-	{
-		int bit = (byteIn & 0x80);
-		return (bit == 0x80) ? true : false;
-	}
+	/*********************************************************************
+	 *********************************************************************
+	 This is the function for GF(2^8) multiplication, used for mixColumns.
+	 Includes rightMostBitSet and leftMostBitSet functions.
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static int peasantsAlgorithm(int aIn, int bIn)
 	{
@@ -233,19 +248,26 @@ public class CAlgos{
 		return p & 0xFF;
 	}
 
-	public static int[][] xorFirstRound(char[][] currentRoundInputIn)
+	public static boolean rightMostBitSet(int byteIn)
 	{
-		char[][] current = currentRoundInputIn;
-		int[][] output = new int[4][4];
-		for(int i = 0; i<4; i++)
-		{
-			for(int j = 0; j<4; j++)
-			{
-				output[i][j] = current[i][j]^key[i][j];
-			}
-		}
-		return output;
+		int bit = (byteIn & 1);
+		return (bit == 1) ? true : false;
 	}
+
+	public static boolean leftMostBitSet(int byteIn)
+	{
+		int bit = (byteIn & 0x80);
+		return (bit == 0x80) ? true : false;
+	}
+
+	/*********************************************************************
+	 *********************************************************************
+	 This is the xor function, takes a 4x4 matrix of values, xors them
+	 with a given key and returns the result, it's the first step of each
+	 round. The one for first round uses the plaintext key. xorWord xors
+	 2 4 byte arrays.
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static int[][] xor(int[][] currentRoundInputIn, int[][] keyIn)
 	{
@@ -260,6 +282,37 @@ public class CAlgos{
 		}
 		return output;
 	}
+
+	public static int[][] xorFirstRound(char[][] currentRoundInputIn)
+	{
+		char[][] current = currentRoundInputIn;
+		int[][] output = new int[4][4];
+		for(int i = 0; i<4; i++)
+		{
+			for(int j = 0; j<4; j++)
+			{
+				output[i][j] = current[i][j]^key[i][j];
+			}
+		}
+		return output;
+	}
+
+	public static int[] wordXor(int[] wordIn, int[]xoredWith)
+	{
+		int[] output = new int[4];
+		for(int j = 0; j<4; j++)
+		{
+			output[j] = wordIn[j]^xoredWith[j];
+		}
+		return output;
+	}
+
+	/*********************************************************************
+	 *********************************************************************
+	 Key expansion method creates 10 keys based on the input key and
+	 stores them in the keyShedule arraylist.
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static void keyExpansion()
 	{
@@ -298,6 +351,22 @@ public class CAlgos{
 		}
 	}
 
+	/*********************************************************************
+	 *********************************************************************
+	 subByte takes a byte of data and substitutes it for a value in the 
+	 sBox, subWord uses this function for a 4 byte array and subBytes uses
+	 this function for 2-D 16 byte array.
+	 *********************************************************************
+	 *********************************************************************/
+
+	public static int subByte(int byteIn)
+	{
+		String byteToHex = String.format("%02X", byteIn);
+		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
+		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
+		return sBox[r][c];
+	}
+
 	public static int[] subWord(int[] wordIn)
 	{
 		int[] wordOut = new int[4];
@@ -308,6 +377,56 @@ public class CAlgos{
 		}
 		return wordOut;
 	}
+
+	public static int[][] subBytes(int[][] bytesIn){
+		int[][] bytesOut = new int[4][4];
+		for(int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				bytesOut[i][j] = subByte(bytesIn[i][j]);
+			}
+		}
+		return bytesOut;
+	}
+
+	public static int invSubByte(int byteIn)
+	{
+		String byteToHex = String.format("%02X", byteIn);
+		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
+		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
+		return invSBox[r][c];
+	}
+
+	public static int[] invSubWord(int[] wordIn)
+	{
+		int[] wordOut = new int[4];
+		for(int i = 0; i < 4; i++)
+		{
+			wordOut[i] = wordIn[i];
+			wordOut[i] = invSubByte(wordOut[i]);
+		}
+		return wordOut;
+	}
+
+	public static int[][] invSubBytes(int[][] bytesIn){
+		int[][] bytesOut = new int[4][4];
+		for(int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				bytesOut[i][j] = invSubByte(bytesIn[i][j]);
+			}
+		}
+		return bytesOut;
+	}
+
+	/*********************************************************************
+	 *********************************************************************
+	 Rotword takes a 4 byte array and puts the first byte on the end.
+	 Rotwordright takes a 4 byte array and puts the last byte on the front.
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static int[] rotWord(int[] wordIn)
 	{
@@ -341,15 +460,14 @@ public class CAlgos{
 		return wordOut;
 	}
 
-	public static int[] wordXor(int[] wordIn, int[]xoredWith)
-	{
-		int[] output = new int[4];
-		for(int j = 0; j<4; j++)
-		{
-			output[j] = wordIn[j]^xoredWith[j];
-		}
-		return output;
-	}
+	/*********************************************************************
+	 *********************************************************************
+	 Shift rows performs a single rot word on the second row of a 2-d
+	 matrix, 2 rotwords on the third row of the matrix and 3 rotwords on 
+	 the fourth row of the matrix. Inverse shift rows does the same thing
+	 but using rotwordright instead.
+	 *********************************************************************
+	 *********************************************************************/
 
 	public static int[][] shiftRows(int[][] stateIn)
 	{
@@ -387,55 +505,5 @@ public class CAlgos{
 		output[3] = rotWordRight(output[3]);
 		output[3] = rotWordRight(output[3]);
 		return output;
-	}
-
-	public static int[] invSubWord(int[] wordIn)
-	{
-		int[] wordOut = new int[4];
-		for(int i = 0; i < 4; i++)
-		{
-			wordOut[i] = wordIn[i];
-			wordOut[i] = invSubByte(wordOut[i]);
-		}
-		return wordOut;
-	}
-
-	public static int invSubByte(int byteIn)
-	{
-		String byteToHex = String.format("%02X", byteIn);
-		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
-		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
-		return invSBox[r][c];
-	}
-
-	public static int[][] invSubBytes(int[][] bytesIn){
-		int[][] bytesOut = new int[4][4];
-		for(int i = 0; i < 4; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				bytesOut[i][j] = invSubByte(bytesIn[i][j]);
-			}
-		}
-		return bytesOut;
-	}
-
-	public static int[][] invMixColumns(int[][] stateIn)
-	{
-		int[][] actualOutput = new int[4][4];
-		int[][] output = new int[4][4];
-		for(int i = 0; i<4; i++) {
-			for (int j = 0; j<4; j++) {
-				output[i][j] = stateIn[i][j];
-			}
-		}
-
-		for(int i = 0; i<4; i++) {
-				actualOutput[0][i] = (peasantsAlgorithm(0x0e, output[0][i])^peasantsAlgorithm(0x0b, output[1][i])^peasantsAlgorithm(0x0d, output[2][i])^peasantsAlgorithm(0x09, output[3][i]));
-				actualOutput[1][i] = (peasantsAlgorithm(0x09, output[0][i])^peasantsAlgorithm(0x0e, output[1][i])^peasantsAlgorithm(0x0b, output[2][i])^peasantsAlgorithm(0x0d, output[3][i]));
-				actualOutput[2][i] = (peasantsAlgorithm(0x0d, output[0][i])^peasantsAlgorithm(0x09, output[1][i])^peasantsAlgorithm(0x0e, output[2][i])^peasantsAlgorithm(0x0b, output[3][i]));
-				actualOutput[3][i] = (peasantsAlgorithm(0x0b, output[0][i])^peasantsAlgorithm(0x0d, output[1][i])^peasantsAlgorithm(0x09, output[2][i])^peasantsAlgorithm(0x0e, output[3][i]));
-		}
-		return actualOutput;
 	}
 }
