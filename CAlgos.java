@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class CAlgos{	
+	static ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
 
 	static int[][] sBox = 	{
 								{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
@@ -35,12 +36,12 @@ public class CAlgos{
 						};
 
 
-	static char[][] key = 	{
+	/*static char[][] key = 	{
 								{'S', ' ', ' ', ' '}, 
 								{'O', '1', 'B', 'K'},
 								{'M', '2', 'I', 'E'}, 
 								{'E', '8', 'T', 'Y'}
-							};
+							};*/
 
 	/*static char[][] input = {
 								{'A', 'C', 'T', 'W'}, 
@@ -50,32 +51,63 @@ public class CAlgos{
 							};*/
 
 	static char[][] input = {
-								{0xd4, 0xe0, 0xb8, 0x1e},
-								{0xbf, 0xb4, 0x41, 0x27},
-								{0x5d, 0x52, 0x11, 0x98},
-								{0x30, 0xae, 0xf1, 0xe5}
+								{0x32, 0x88, 0x31, 0xe0},
+								{0x43, 0x5a, 0x31, 0x37},
+								{0xf6, 0x30, 0x98, 0x07},
+								{0xa8, 0x8d, 0xa2, 0x34}
+							};
+
+	static char[][] key = {
+								{0x2b, 0x28, 0xab, 0x09},
+								{0x7e, 0xae, 0xf7, 0xcf},
+								{0x15, 0xd2, 0x15, 0x4f},
+								{0x16, 0xa6, 0x88, 0x3c}
 							};
 
 	
 
 	public static void main(String[] args)
 	{
-		int[][] test = new int[4][4];
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j<4; j++) {
-				test[i][j] = input[i][j];
-				System.out.print(Integer.toHexString(test[i][j]) + " ");
+				// System.out.print(input[i][j] + " ");
+			}
+			// System.out.println();
+		}
+		int[][] intKey = new int[4][4];
+		for (int i = 0; i<4; i++) {
+			for (int j = 0; j<4; j++) {
+				intKey[i][j] = key[i][j];
+			}
+			
+		}
+		keyShedule.add(intKey);
+		keyExpansion();
+		int[][] output = encrypt(input);
+
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j<4; j++) {
+				System.out.print(String.format("%02X", output[i][j]) + " ");
 			}
 			System.out.println();
 		}
-		System.out.println();
-		test = mixColumns(test);
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j<4; j++) {
-				System.out.print(Integer.toHexString(test[i][j]) + " ");
-			}
-			System.out.println();
+
+	}
+
+	public static int[][] encrypt(char[][] in){
+		int[][] preFirstRountState = xorFirstRound(in);
+		for (int i = 0; i<9; i++) {
+			preFirstRountState = subBytes(preFirstRountState);
+			preFirstRountState = shiftRows(preFirstRountState);
+			preFirstRountState = mixColumns(preFirstRountState);
+			preFirstRountState = xor(preFirstRountState, keyShedule.get(i+1));
 		}
+
+		preFirstRountState = subBytes(preFirstRountState);
+		preFirstRountState = shiftRows(preFirstRountState);
+		preFirstRountState = xor(preFirstRountState, keyShedule.get(10));
+
+		return preFirstRountState;
 	}
 
 	public static int subByte(int byteIn)
@@ -156,5 +188,126 @@ public class CAlgos{
 			}
 		}
 		return p & 0xFF;
+	}
+
+	public static int[][] xorFirstRound(char[][] currentRoundInputIn)
+	{
+		char[][] current = currentRoundInputIn;
+		int[][] output = new int[4][4];
+		for(int i = 0; i<4; i++)
+		{
+			for(int j = 0; j<4; j++)
+			{
+				output[i][j] = current[i][j]^key[i][j];
+			}
+		}
+		return output;
+	}
+
+	public static int[][] xor(int[][] currentRoundInputIn, int[][] keyIn)
+	{
+		int[][] current = currentRoundInputIn;
+		int[][] output = new int[4][4];
+		for(int i = 0; i<4; i++)
+		{
+			for(int j = 0; j<4; j++)
+			{
+				output[i][j] = current[i][j]^keyIn[i][j];
+			}
+		}
+		return output;
+	}
+
+	public static void keyExpansion()
+	{
+		for(int j = 0; j < 10; j++){
+			int[] newFirstWord = new int[4];
+			int[] newSecondWord = new int[4];
+			int[] newThirdWord = new int[4];
+			int[] newFourthWord = new int[4];
+			int[] oldFourthWord = new int[4];
+			int[] oldFirstWord = new int[4];
+			int[] oldSecondWord = new int[4];
+			int[] oldThirdWord = new int[4];
+			for(int i = 0; i<4; i++)
+			{
+				oldFirstWord[i] = keyShedule.get(j)[i][0];
+				oldSecondWord[i] = keyShedule.get(j)[i][1];
+				oldThirdWord[i] = keyShedule.get(j)[i][2];
+				oldFourthWord[i] = keyShedule.get(j)[i][3];
+			}
+			newFirstWord = rotWord(oldFourthWord);
+			newFirstWord = subWord(newFirstWord);
+			newFirstWord = wordXor(newFirstWord, rCon[j]);
+			newFirstWord = wordXor(newFirstWord, oldFirstWord);
+			newSecondWord = wordXor(oldSecondWord, newFirstWord);
+			newThirdWord = wordXor(oldThirdWord, newSecondWord);
+			newFourthWord = wordXor(oldFourthWord, newThirdWord);
+			int[][] output = new int[4][4];
+			for (int k = 0; k<4; k++) {
+				output[k][0] = newFirstWord[k];
+				output[k][1] = newSecondWord[k];
+				output[k][2] = newThirdWord[k];
+				output[k][3] = newFourthWord[k];
+			}
+
+			keyShedule.add(output);
+		}
+	}
+
+	public static int[] subWord(int[] wordIn)
+	{
+		int[] wordOut = new int[4];
+		for(int i = 0; i < 4; i++)
+		{
+			wordOut[i] = wordIn[i];
+			wordOut[i] = subByte(wordOut[i]);
+		}
+		return wordOut;
+	}
+
+	public static int[] rotWord(int[] wordIn)
+	{
+		int[] wordOut = new int[4];
+		int temp = wordIn[0];
+		for(int i = 0; i < 4; i++)
+		{
+			wordOut[i] = wordIn[i];
+		}
+		for(int i = 0;i<3;i++)
+		{
+			wordOut[i] = wordOut[i+1];
+		}
+		wordOut[3] = temp;
+		return wordOut;
+	}
+
+	public static int[] wordXor(int[] wordIn, int[]xoredWith)
+	{
+		int[] output = new int[4];
+		for(int j = 0; j<4; j++)
+		{
+			output[j] = wordIn[j]^xoredWith[j];
+		}
+		return output;
+	}
+
+	public static int[][] shiftRows(int[][] stateIn)
+	{
+		int[][] output = new int[4][4];
+		for (int i = 0; i<4; i++) {
+			output[0][i] = stateIn[0][i];
+		}
+		// first row is untouched
+		// row 2 shift by 1
+		output[1] = rotWord(stateIn[1]);
+		// row 3 shift by 2
+		output[2] = rotWord(stateIn[2]);
+		output[2] = rotWord(output[2]);
+		//row 4 shift by 3
+		output[3] = rotWord(stateIn[3]);
+		output[3] = rotWord(output[3]);
+		output[3] = rotWord(output[3]);
+		return output;
 	}
 }
