@@ -13,12 +13,12 @@ public abstract class JAlgos
 		return wordOut;
 	}
 
-	// shift to left
-	// assumes input has 4 rows
+    // shift to left
+    // assumes input has 4 rows
 	public static void shiftRows(int[][] input)
 	{
 		// first row is untouched
-		// row 2 shift by 1
+		//row 2 shift by 1
 		AES.rotWord(input[1]);
 		// row 3 shift by 2
 		AES.rotWord(input[2]);

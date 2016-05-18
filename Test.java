@@ -43,6 +43,9 @@ public class Test
 			s+=doubleArray[i][3] + "}";
 			System.out.println(s);
 		}
+		System.out.println("\n\n\n");
+		System.out.println("doubleArray[0][1]" + doubleArray[0][1]);
+		System.out.println("doubleArray[1][0]" + doubleArray[1][0]);
 	}
 }
 

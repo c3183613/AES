@@ -1,9 +1,8 @@
 import java.util.ArrayList;
-
-//just has function for gf multiplication so far
 public class AES
 {
-	private static int[][] sBox = 	{
+	private static int[][] sBox = 	
+								{
 									{0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76},
 									{0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0},
 									{0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15},
@@ -20,9 +19,10 @@ public class AES
 									{0x70, 0x3e, 0xb5, 0x66, 0x48, 0x03, 0xf6, 0x0e, 0x61, 0x35, 0x57, 0xb9, 0x86, 0xc1, 0x1d, 0x9e},
 									{0xe1, 0xf8, 0x98, 0x11, 0x69, 0xd9, 0x8e, 0x94, 0x9b, 0x1e, 0x87, 0xe9, 0xce, 0x55, 0x28, 0xdf},
 									{0x8c, 0xa1, 0x89, 0x0d, 0xbf, 0xe6, 0x42, 0x68, 0x41, 0x99, 0x2d, 0x0f, 0xb0, 0x54, 0xbb, 0x16},
-							};
+								};
 
-	private static int[][] invSBox = 	{
+	private static int[][] invSBox = 	
+								{
 									{0x52, 0x09, 0x6a, 0xd5, 0x30, 0x36, 0xa5, 0x38, 0xbf, 0x40, 0xa3, 0x9e, 0x81, 0xf3, 0xd7, 0xfb},
 									{0x7c, 0xe3, 0x39, 0x82, 0x9b, 0x2f, 0xff, 0x87, 0x34, 0x8e, 0x43, 0x44, 0xc4, 0xde, 0xe9, 0xcb},
 									{0x54, 0x7b, 0x94, 0x32, 0xa6, 0xc2, 0x23, 0x3d, 0xee, 0x4c, 0x95, 0x0b, 0x42, 0xfa, 0xc3, 0x4e},
@@ -41,7 +41,8 @@ public class AES
 									{0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}
 								};
 
-	private static int[][] rCon={	
+	private static int[][] rCon=
+						{	
 							{1,0,0,0},
 							{2,0,0,0},
 							{4,0,0,0},
@@ -80,7 +81,8 @@ public class AES
 	 *********************************************************************
 	 *********************************************************************/
 
-	public static int[][] encrypt(int[][] in, ArrayList<int[][]> keyShedule){
+	public static int[][] encrypt(int[][] in, ArrayList<int[][]> keyShedule)
+	{
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		for (int i = 0; i<9; i++) {
 			preFirstRountState = subBytes(preFirstRountState);
@@ -102,7 +104,8 @@ public class AES
 	 *********************************************************************
 	 *********************************************************************/
 
-	public static int[][] decrypt(int[][] in, ArrayList<int[][]> keyShedule){
+	public static int[][] decrypt(int[][] in, ArrayList<int[][]> keyShedule)
+	{
 		int[][] encryptedData = xor(in, keyShedule.get(10));
 		for (int i = 9; i>0; i--) {
 			encryptedData = invShiftRows(encryptedData);
@@ -206,8 +209,10 @@ public class AES
 	{
 		int[][] actualOutput = new int[4][4];
 		int[][] output = new int[4][4];
-		for(int i = 0; i<4; i++) {
-			for (int j = 0; j<4; j++) {
+		for(int i = 0; i<4; i++) 
+		{
+			for (int j = 0; j<4; j++) 
+			{
 				output[i][j] = stateIn[i][j];
 			}
 		}
@@ -257,12 +262,18 @@ public class AES
 		return p & 0xFF;
 	}
 
+	// Takes a byte as input
+	// returns true if right-most bit is 1
+	// returns false otherwise
 	public static boolean rightMostBitSet(int byteIn)
 	{
 		int bit = (byteIn & 1);
 		return (bit == 1) ? true : false;
 	}
 
+	// Takes a byte as input
+	// returns true if left-most bit is 1
+	// returns false otherwise
 	public static boolean leftMostBitSet(int byteIn)
 	{
 		int bit = (byteIn & 0x80);
@@ -379,12 +390,17 @@ public class AES
 		return sBox[r][c];
 	}
 
+	// Each word == 4 bytes
+	// 
 	public static int[] subWord(int[] wordIn)
 	{
 		int[] wordOut = new int[4];
+		// for each byte
 		for(int i = 0; i < 4; i++)
 		{
+			// copy into wordOut
 			wordOut[i] = wordIn[i];
+			// 
 			wordOut[i] = subByte(wordOut[i]);
 		}
 		return wordOut;
@@ -518,4 +534,97 @@ public class AES
 		output[3] = rotWordRight(output[3]);
 		return output;
 	}
+
+	/*
+		Input: 128 bit String
+		Output: ArrayList of type int[][] which
+	*/
+	public static ArrayList<int[][]> avFlipBit(String input)
+	{
+		ArrayList<int[][]> returnList = new ArrayList<int[][]>();
+		// for 128 bits
+		String copyString = "";
+		if(input.charAt(0) == '0')
+		{
+			copyString = "1";
+			copyString+=input.substring(1);
+		}
+		else
+		{
+			copyString="0";
+			copyString+=input.substring(1);	
+		}
+		returnList.add(stringToArray(copyString));
+		for(int i=1;i<127;i++)
+		{
+			// change the bit at i
+			if(input.charAt(i) == '0')
+			{
+				copyString = input.substring(0,i);
+				copyString+="1";
+				copyString+= input.substring(i+1);
+			}
+			else
+			{
+				copyString = input.substring(0,i);
+				copyString+="0";
+				copyString+= input.substring(i+1);
+			}
+			System.out.println(copyString);
+			returnList.add(stringToArray(copyString));
+		}
+		if(input.charAt(127) == '0')
+		{
+			copyString = input.substring(0,127);
+			copyString+="1";
+		}
+		else
+		{
+			copyString = input.substring(0,127);
+			copyString+="0";
+		}
+		return returnList;
+	}
+
+	// Takes a 128 bit string, turns it into a 4x4 array of
+	// hexadecimals
+	public static int[][] stringToArray(String input)
+	{
+		int[][] returnMe = new int[4][4];
+		String origInput = input;
+		String word = "";
+		int l = 0; int m = 0;
+		// returnMe[0][1] - row 1 column 0
+		for (int i = 0; i<16; i++) 
+		{
+			word = "";
+			for (int j = 0; j<8; j++) 
+			{
+				word += origInput.charAt(0);
+				origInput = origInput.substring(1);
+			}
+			returnMe[l][m] = Integer.parseInt(word, 2);
+			if((i+1)%4 == 0 && i != 0)
+			{
+				m++;
+				l = 0;
+			}
+			else
+			{
+				l++;
+			}
+		}
+		return returnMe;
+	}
 }
+/*
+if((i+1)%4 == 0 && i != 0)
+			{
+				m++;
+				l = 0;
+			}
+			else
+			{
+				l++;
+			}
+*/
