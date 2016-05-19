@@ -90,8 +90,7 @@ public class CAlgos
 			}
 			System.out.println();
 		}
-
-		ArrayList<ArrayList<int[][]>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
+		ArrayList<ArrayList<String>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
 		// Jeremy's testing
 		// ArrayList<int[][]> whatDo = AES.avFlipBit(testBinaryIn);
 		// System.out.println();
@@ -108,5 +107,17 @@ public class CAlgos
 		// 	}
 		// 	System.out.println();
 		// }
+	}
+
+	public static int bitsDifferent(String s1, String s2)
+	{
+		int count = 0;
+		for (int i = 0; i<128; i++) {
+			if(s1.charAt(i) != s2.charAt(i))
+			{
+				count++;
+			}
+		}
+		return count;
 	}
 }

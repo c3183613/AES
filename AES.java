@@ -71,7 +71,7 @@ public class AES
 							};*/
 
 
-	static ArrayList<ArrayList<int[][]>> data = new ArrayList<ArrayList<int[][]>>();
+	static ArrayList<ArrayList<String>> data = new ArrayList<ArrayList<String>>();
 		
 
 	/*********************************************************************
@@ -124,10 +124,10 @@ public class AES
 
 	// ************************** AES FUNCTIONS **************************
 
-	public static ArrayList<ArrayList<int[][]>> generateAvalancheData(ArrayList<int[][]> pTextIn, ArrayList<int[][]> kIn)
+	public static ArrayList<ArrayList<String>> generateAvalancheData(ArrayList<int[][]> pTextIn, ArrayList<int[][]> kIn)
 	{
 		for (int i=0; i<55; i++) {
-			ArrayList<int[][]> newList = new ArrayList<int[][]>();
+			ArrayList<String> newList = new ArrayList<String>();
 			data.add(newList);
 		}
 		ArrayList<int[][]> keyShedule = keyExpansion(kIn.get(0));
@@ -180,13 +180,13 @@ public class AES
 
 	public static int[][] AES0(int[][] in, ArrayList<int[][]> keyShedule)
 	{
-		data.get(0).add(in);
+		data.get(0).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(1).add(preFirstRountState);
+		data.get(1).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -198,7 +198,7 @@ public class AES
 			input = shiftRows(input);
 			input = mixColumns(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+1).add(input);
+			data.get(i+1).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -210,19 +210,19 @@ public class AES
 		lastIn = subBytes(lastIn);
 		lastIn = shiftRows(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(10).add(lastIn);
+		data.get(10).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
 
 	public static int[][] AES1(int[][] in, ArrayList<int[][]> keyShedule)
 	{
-		data.get(11).add(in);
+		data.get(11).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(12).add(preFirstRountState);
+		data.get(12).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -233,7 +233,7 @@ public class AES
 			int[][] input = shiftRows(firstIn);
 			input = mixColumns(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+12).add(input);
+			data.get(i+12).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -244,19 +244,19 @@ public class AES
 		}
 		lastIn = shiftRows(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(21).add(lastIn);
+		data.get(21).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
 
 	public static int[][] AES2(int[][] in, ArrayList<int[][]> keyShedule)
 	{
-		data.get(22).add(in);
+		data.get(22).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(23).add(preFirstRountState);
+		data.get(23).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -267,7 +267,7 @@ public class AES
 			int[][] input = subBytes(firstIn);
 			input = mixColumns(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+23).add(input);
+			data.get(i+23).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -278,19 +278,19 @@ public class AES
 		}
 		lastIn = subBytes(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(32).add(lastIn);
+		data.get(32).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
 
 	public static int[][] AES3(int[][] in, ArrayList<int[][]> keyShedule)
 	{
-		data.get(33).add(in);
+		data.get(33).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(34).add(preFirstRountState);
+		data.get(34).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -301,7 +301,7 @@ public class AES
 			int[][] input = subBytes(firstIn);
 			input = shiftRows(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+34).add(input);
+			data.get(i+34).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -313,19 +313,19 @@ public class AES
 		lastIn = subBytes(lastIn);
 		lastIn = shiftRows(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(43).add(lastIn);
+		data.get(43).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
 
 	public static int[][] AES4(int[][] in, ArrayList<int[][]> keyShedule)
 	{
-		data.get(44).add(in);
+		data.get(44).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
-		data.get(45).add(preFirstRountState);
+		data.get(45).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -336,7 +336,7 @@ public class AES
 			int[][] input = subBytes(firstIn);
 			input = shiftRows(input);
 			input = mixColumns(input);
-			data.get(i+45).add(input);
+			data.get(i+45).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -347,7 +347,7 @@ public class AES
 		}
 		lastIn = subBytes(lastIn);
 		lastIn = shiftRows(lastIn);
-		data.get(54).add(lastIn);
+		data.get(54).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
@@ -359,7 +359,7 @@ public class AES
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(1).add(preFirstRountState);
+		data.get(1).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -371,7 +371,7 @@ public class AES
 			input = shiftRows(input);
 			input = mixColumns(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+1).add(input);
+			data.get(i+1).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -383,7 +383,7 @@ public class AES
 		lastIn = subBytes(lastIn);
 		lastIn = shiftRows(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(10).add(lastIn);
+		data.get(10).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
@@ -394,7 +394,7 @@ public class AES
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(12).add(preFirstRountState);
+		data.get(12).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -405,7 +405,7 @@ public class AES
 			int[][] input = shiftRows(firstIn);
 			input = mixColumns(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+12).add(input);
+			data.get(i+12).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -416,7 +416,7 @@ public class AES
 		}
 		lastIn = shiftRows(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(21).add(lastIn);
+		data.get(21).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
@@ -427,7 +427,7 @@ public class AES
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(23).add(preFirstRountState);
+		data.get(23).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -438,7 +438,7 @@ public class AES
 			int[][] input = subBytes(firstIn);
 			input = mixColumns(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+23).add(input);
+			data.get(i+23).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -449,7 +449,7 @@ public class AES
 		}
 		lastIn = subBytes(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(32).add(lastIn);
+		data.get(32).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
@@ -460,7 +460,7 @@ public class AES
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = xor(preFirstRountState, keyShedule.get(1));
-		data.get(34).add(preFirstRountState);
+		data.get(34).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -471,7 +471,7 @@ public class AES
 			int[][] input = subBytes(firstIn);
 			input = shiftRows(input);
 			input = xor(input, keyShedule.get(i+1));
-			data.get(i+34).add(input);
+			data.get(i+34).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -483,7 +483,7 @@ public class AES
 		lastIn = subBytes(lastIn);
 		lastIn = shiftRows(lastIn);
 		lastIn = xor(lastIn, keyShedule.get(10));
-		data.get(43).add(lastIn);
+		data.get(43).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
@@ -494,7 +494,7 @@ public class AES
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
-		data.get(45).add(preFirstRountState);
+		data.get(45).add(matrixToString(preFirstRountState));
 		int[][] firstIn = new int[4][4];
 		for (int i = 0; i<4; i++) {
 			for (int j =0; j<4; j++) {
@@ -505,7 +505,7 @@ public class AES
 			int[][] input = subBytes(firstIn);
 			input = shiftRows(input);
 			input = mixColumns(input);
-			data.get(i+45).add(input);
+			data.get(i+45).add(matrixToString(input));
 			firstIn = input;
 		}
 		int[][] lastIn = new int[4][4];
@@ -516,7 +516,7 @@ public class AES
 		}
 		lastIn = subBytes(lastIn);
 		lastIn = shiftRows(lastIn);
-		data.get(54).add(lastIn);
+		data.get(54).add(matrixToString(lastIn));
 
 		return lastIn;
 	}
@@ -1006,5 +1006,18 @@ public class AES
 			}
 		}
 		return returnMe;
+	}
+
+	public static String matrixToString(int[][] input)
+	{
+		String s ="";
+		for(int i=0;i<4;i++)
+		{
+			for(int j=0; j<4;j++)
+			{
+				s+=String.format("%8s", Integer.toBinaryString(input[j][i])).replace(' ', '0');
+			}
+		}
+		return s;
 	}
 }

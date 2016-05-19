@@ -101,11 +101,11 @@ public abstract class JAlgos
 	public static String matrixToString(int[][] input)
 	{
 		String s ="";
-		for(int i=0;i<input.length;i++)
+		for(int i=0;i<4;i++)
 		{
-			for(int j=0; j<input[i].length;j++)
+			for(int j=0; j<4;j++)
 			{
-				s+=Integer.toBinaryString(input[j][i]);
+				s+=String.format("%8s", Integer.toBinaryString(input[j][i])).replace(' ', '0');
 			}
 		}
 		return s;
