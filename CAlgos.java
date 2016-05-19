@@ -54,7 +54,7 @@ public class CAlgos
 			}
 		}
 		ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);
-		ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy)
+		ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy);
 
 		// Print out the hexadecimal representation of each array element in a cube
 		for (int i = 0; i < 4; i++) 
@@ -90,22 +90,5 @@ public class CAlgos
 			}
 			System.out.println();
 		}
-
-		// Jeremy's testing
-		// ArrayList<int[][]> whatDo = AES.avFlipBit(testBinaryIn);
-		// System.out.println();
-		// System.out.println(testBinaryIn+"original");
-		// for(int[][] test: whatDo)
-		// {
-		// 	for(int i=0;i<4;i++)
-		// 	{
-		// 		for(int j=0;j<4;j++)
-		// 		{
-		// 			System.out.print((test[i][j]) + " ");
-		// 		}
-		// 		System.out.println();
-		// 	}
-		// 	System.out.println();
-		// }
 	}
 }
