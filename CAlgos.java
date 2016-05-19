@@ -54,7 +54,7 @@ public class CAlgos
 			}
 		}
 		ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);
-		ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy)
+		ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy);
 
 		// Print out the hexadecimal representation of each array element in a cube
 		for (int i = 0; i < 4; i++) 
@@ -91,6 +91,7 @@ public class CAlgos
 			System.out.println();
 		}
 
+		ArrayList<ArrayList<int[][]>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
 		// Jeremy's testing
 		// ArrayList<int[][]> whatDo = AES.avFlipBit(testBinaryIn);
 		// System.out.println();
