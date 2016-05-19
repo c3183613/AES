@@ -84,7 +84,8 @@ public class AES
 	public static int[][] encrypt(int[][] in, ArrayList<int[][]> keyShedule)
 	{
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
-		for (int i = 0; i<9; i++) {
+		for (int i = 0; i<9; i++) 
+		{
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = shiftRows(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
