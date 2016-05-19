@@ -57,56 +57,33 @@ public class CAlgos
 		ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy);
 
 		// Print out the hexadecimal representation of each array element in a cube
-		for (int i = 0; i < 4; i++) 
-		{
-			for (int j = 0; j<4; j++) 
-			{
-				System.out.print(String.format("%02X", input[i][j]) + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
 
 		ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
 		keyShedule = AES.keyExpansion(key);
 		// encrypt the input using the key given
 		int[][] output = AES.encrypt(input, keyShedule);
-		for (int i = 0; i < 4; i++) 
-		{
-			for (int j = 0; j<4; j++) 
-			{
-				System.out.print(String.format("%02X", output[i][j]) + " ");
-			}
-			System.out.println();
-		}
-		System.out.println();
-		// decrypt the input using the key given
-		int[][] decrypted = AES.decrypt(output, keyShedule);
-		for (int i = 0; i < 4; i++) 
-		{
-			for (int j = 0; j<4; j++) 
-			{
-				System.out.print(String.format("%02X", decrypted[i][j]) + " ");
-			}
-			System.out.println();
-		}
 		ArrayList<ArrayList<String>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
-		int firstCount = 0;
-		int secondCount = 0;
+		float firstCount = 0;
+		float secondCount = 0;
 		ArrayList<Integer> aES0List = new ArrayList<Integer>();
 		ArrayList<Integer> aES1List = new ArrayList<Integer>();
 		ArrayList<Integer> aES2List = new ArrayList<Integer>();
 		ArrayList<Integer> aES3List = new ArrayList<Integer>();
 		ArrayList<Integer> aES4List = new ArrayList<Integer>();
-		for (int j = 0; j<55; j++) {
+		ArrayList<Integer> aES0ListSecond = new ArrayList<Integer>();
+		ArrayList<Integer> aES1ListSecond = new ArrayList<Integer>();
+		ArrayList<Integer> aES2ListSecond = new ArrayList<Integer>();
+		ArrayList<Integer> aES3ListSecond = new ArrayList<Integer>();
+		ArrayList<Integer> aES4ListSecond = new ArrayList<Integer>();
+		for (int j = 0; j<55; j++) 
+		{
 			firstCount = secondCount = 0;
-			for (int i = 1; i<129; i++) {
+			for (int i = 1; i<129; i++) 
+			{
 				firstCount += bitsDifferent(data.get(j).get(0), data.get(j).get(i));
 			}
-			if(j < 11){
-				System.out.println(j);
+			if(j < 11)
 				aES0List.add(new Integer(Math.round(firstCount/128)));
-			}
 			else if(11 <= j && j < 22)
 				aES1List.add(new Integer(Math.round(firstCount/128)));
 			else if(22 <= j && j < 33)
@@ -115,14 +92,35 @@ public class CAlgos
 				aES3List.add(new Integer(Math.round(firstCount/128)));
 			else if(j < 55)
 				aES4List.add(new Integer(Math.round(firstCount/128)));
-			for (int i = 130; i<258; i++) {
+			for (int i = 130; i<258; i++) 
+			{
 				secondCount += bitsDifferent(data.get(j).get(0), data.get(j).get(i));
 			}
-			//System.out.println(secondCount/128);
+			if(j < 11)
+				aES0ListSecond.add(new Integer(Math.round(secondCount/128)));
+			else if(11 <= j && j < 22)
+				aES1ListSecond.add(new Integer(Math.round(secondCount/128)));
+			else if(22 <= j && j < 33)
+				aES2ListSecond.add(new Integer(Math.round(secondCount/128)));
+			else if(33 <= j && j < 44)
+				aES3ListSecond.add(new Integer(Math.round(secondCount/128)));
+			else if(j < 55)
+				aES4ListSecond.add(new Integer(Math.round(secondCount/128)));
 		}
+		System.out.println("ENCRYPTION");
+		System.out.println("Plaintext P: " + AES.matrixToString(input));
+		System.out.println("Key K: " + AES.matrixToString(key));
+		System.out.println("Ciphertext C: " + AES.matrixToString(output));
+		System.out.println("Running Time: XXX");
+		System.out.println("Avalanche:\nP and Pi under K");
 		System.out.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
 		for(int i = 0; i<aES0List.size();i++){
 			System.out.println("  " + i + "\t\t" + aES0List.get(i) + "\t" + aES1List.get(i) + "\t" + aES2List.get(i) + "\t" + aES3List.get(i) + "\t" + aES4List.get(i));
+		}
+		System.out.println("P under K and Ki");
+		System.out.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
+		for(int i = 0; i<aES0List.size();i++){
+			System.out.println("  " + i + "\t\t" + aES0ListSecond.get(i) + "\t" + aES1ListSecond.get(i) + "\t" + aES2ListSecond.get(i) + "\t" + aES3ListSecond.get(i) + "\t" + aES4ListSecond.get(i));
 		}
 		// Jeremy's testing
 		// ArrayList<int[][]> whatDo = AES.avFlipBit(testBinaryIn);
