@@ -120,10 +120,13 @@ public class AES
 
 		return encryptedData;
 	}
-/*
-	public int[][] AES1(char[][] in){
+
+	// ************************** AES FUNCTIONS **************************
+	public static int[][] AES1(int[][] in, ArrayList<int[][]> keyShedule)
+	{
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
-		for (int i = 0; i<9; i++) {
+		for (int i = 0; i<9; i++) 
+		{
 			preFirstRountState = shiftRows(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
 			preFirstRountState = xor(preFirstRountState, keyShedule.get(i+1));
@@ -134,9 +137,11 @@ public class AES
 		return preFirstRountState;
 	}
 
-	public int[][] AES2(char[][] in){
+	public static int[][] AES2(int[][] in, ArrayList<int[][]> keyShedule)
+	{
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
-		for (int i = 0; i<9; i++) {
+		for (int i = 0; i<9; i++) 
+		{
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
 			preFirstRountState = xor(preFirstRountState, keyShedule.get(i+1));
@@ -147,9 +152,11 @@ public class AES
 		return preFirstRountState;
 	}
 
-	public int[][] AES3(char[][] in){
+	public static int[][] AES3(int[][] in, ArrayList<int[][]> keyShedule)
+	{
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
-		for (int i = 0; i<9; i++) {
+		for (int i = 0; i<9; i++) 
+		{
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = shiftRows(preFirstRountState);
 			preFirstRountState = xor(preFirstRountState, keyShedule.get(i+1));
@@ -161,14 +168,18 @@ public class AES
 		return preFirstRountState;
 	}
 
-	public int[][] AES4(char[][] in){
+	public static int[][] AES4(int[][] in, ArrayList<int[][]> keyShedule)
+	{
 		int[][] preFirstRountState = new int[4][4];
-		for (int i = 0; i<4; i++) {
-			for (int j = 0; j<4; j++) {
+		for (int i = 0; i<4; i++) 
+		{
+			for (int j = 0; j<4; j++) 
+			{
 				preFirstRountState[i][j] = in[i][j];
 			}
 		}
-		for (int i = 0; i<9; i++) {
+		for (int i = 0; i<9; i++) 
+		{
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = shiftRows(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
@@ -177,7 +188,7 @@ public class AES
 		preFirstRountState = shiftRows(preFirstRountState);
 
 		return preFirstRountState;
-	} */
+	}
 
 	/*********************************************************************
 	 *********************************************************************
@@ -554,6 +565,7 @@ public class AES
 			copyString="0";
 			copyString+=input.substring(1);	
 		}
+		// System.out.println("this is what i'm looking for: "+copyString);
 		returnList.add(stringToArray(copyString));
 		for(int i=1;i<127;i++)
 		{
@@ -570,7 +582,7 @@ public class AES
 				copyString+="0";
 				copyString+= input.substring(i+1);
 			}
-			System.out.println(copyString);
+			// System.out.println(copyString);
 			returnList.add(stringToArray(copyString));
 		}
 		if(input.charAt(127) == '0')
@@ -583,6 +595,7 @@ public class AES
 			copyString = input.substring(0,127);
 			copyString+="0";
 		}
+		returnList.add(stringToArray(copyString));
 		return returnList;
 	}
 
