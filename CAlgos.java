@@ -53,8 +53,8 @@ public class CAlgos
 				l++;
 			}
 		}
-		ArrayList<int[][]> whatDo = AES.avFlipBit(binaryInCopy);
-		ArrayList<int[][]> whatDo = AES.avFlipBit(keyInCopy)
+		ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);
+		ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy)
 
 		// Print out the hexadecimal representation of each array element in a cube
 		for (int i = 0; i < 4; i++) 

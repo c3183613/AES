@@ -395,29 +395,43 @@ public class AES
 
 	public static int subByte(int byteIn)
 	{
+		// turns byte into hexadecimal
 		String byteToHex = String.format("%02X", byteIn);
+		// stores row value
 		int r = (Integer.decode("0x0" + byteToHex.charAt(0)));
+		// stores column value
 		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
+		// returns 
 		return sBox[r][c];
 	}
 
-	// Each word == 4 bytes
-	// 
+	/*********************************************************************
+	 *********************************************************************
+	 subWord uses subBytes as 4 bytes = 1 word
+	 *********************************************************************
+	 *********************************************************************/
 	public static int[] subWord(int[] wordIn)
 	{
+		// create new array
 		int[] wordOut = new int[4];
 		// for each byte
 		for(int i = 0; i < 4; i++)
 		{
 			// copy into wordOut
 			wordOut[i] = wordIn[i];
-			// 
+			// perform subBytes on wordOut[i]
 			wordOut[i] = subByte(wordOut[i]);
 		}
+		// return new array
 		return wordOut;
 	}
-
-	public static int[][] subBytes(int[][] bytesIn){
+	/*********************************************************************
+	 *********************************************************************
+	 Performs subSyte on a 4x4 matrix, returns result in a new 4x4 array
+	 *********************************************************************
+	 *********************************************************************/
+	public static int[][] subBytes(int[][] bytesIn)
+	{
 		int[][] bytesOut = new int[4][4];
 		for(int i = 0; i < 4; i++)
 		{
@@ -428,7 +442,12 @@ public class AES
 		}
 		return bytesOut;
 	}
-
+	/*********************************************************************
+	 *********************************************************************
+	 invSubByte takes the byte and uses the lookup table to find the original
+	 value
+	 *********************************************************************
+	 *********************************************************************/
 	public static int invSubByte(int byteIn)
 	{
 		String byteToHex = String.format("%02X", byteIn);
@@ -436,7 +455,11 @@ public class AES
 		int c = (Integer.decode("0x0" + byteToHex.charAt(1)));
 		return invSBox[r][c];
 	}
-
+	/*********************************************************************
+	 *********************************************************************
+	 invSubWord uses invSubByte to decode each of the bytes in the word given
+	 *********************************************************************
+	 *********************************************************************/
 	public static int[] invSubWord(int[] wordIn)
 	{
 		int[] wordOut = new int[4];
@@ -447,7 +470,11 @@ public class AES
 		}
 		return wordOut;
 	}
-
+	/*********************************************************************
+	 *********************************************************************
+	 Performs invSubBytes on a 4x4 array, returns a new 4x4 array
+	 *********************************************************************
+	 *********************************************************************/
 	public static int[][] invSubBytes(int[][] bytesIn){
 		int[][] bytesOut = new int[4][4];
 		for(int i = 0; i < 4; i++)
@@ -462,39 +489,50 @@ public class AES
 
 	/*********************************************************************
 	 *********************************************************************
-	 Rotword takes a 4 byte array and puts the first byte on the end.
-	 Rotwordright takes a 4 byte array and puts the last byte on the front.
+	 Rotword takes a 4 byte array and puts the first byte on the end and
+	 returns a new array
+	 Rotwordright takes a 4 byte array and puts the last byte on the front
+	 returns a new array
 	 *********************************************************************
 	 *********************************************************************/
 
 	public static int[] rotWord(int[] wordIn)
 	{
 		int[] wordOut = new int[4];
+		// save element that will be written over
 		int temp = wordIn[0];
 		for(int i = 0; i < 4; i++)
 		{
+			// copy each element that in to new array
 			wordOut[i] = wordIn[i];
 		}
+		// move each element to its left
 		for(int i = 0;i<3;i++)
 		{
 			wordOut[i] = wordOut[i+1];
 		}
+		// place the saved element at the end (bar the first element)
 		wordOut[3] = temp;
 		return wordOut;
 	}
 
 	public static int[] rotWordRight(int[] wordIn)
 	{
+		// create a new array of size 4
 		int[] wordOut = new int[4];
+		// temporarily hold element which will be written over
 		int temp = wordIn[3];
+		// copy elements in wordIn to a new array
 		for(int i = 0; i < 4; i++)
 		{
 			wordOut[i] = wordIn[i];
 		}
+		// move each element to its left, (bar the last element)
 		for(int i = 3;i>0;i--)
 		{
 			wordOut[i] = wordOut[i-1];
 		}
+		// place last element's value in the first index
 		wordOut[0] = temp;
 		return wordOut;
 	}
@@ -502,16 +540,17 @@ public class AES
 	/*********************************************************************
 	 *********************************************************************
 	 Shift rows performs a single rot word on the second row of a 2-d
-	 matrix, 2 rotwords on the third row of the matrix and 3 rotwords on 
+	 matrix, 2 rotwords on the third row of the matrix and 3 rotWords on 
 	 the fourth row of the matrix. Inverse shift rows does the same thing
-	 but using rotwordright instead.
+	 but using rotWordRight instead.
 	 *********************************************************************
 	 *********************************************************************/
 
 	public static int[][] shiftRows(int[][] stateIn)
 	{
 		int[][] output = new int[4][4];
-		for (int i = 0; i<4; i++) {
+		for (int i = 0; i<4; i++) 
+		{
 			output[0][i] = stateIn[0][i];
 		}
 		// first row is untouched
@@ -530,7 +569,8 @@ public class AES
 	public static int[][] invShiftRows(int[][] stateIn)
 	{
 		int[][] output = new int[4][4];
-		for (int i = 0; i<4; i++) {
+		for (int i = 0; i<4; i++) 
+		{
 			output[0][i] = stateIn[0][i];
 		}
 		// first row is untouched
@@ -555,6 +595,7 @@ public class AES
 		ArrayList<int[][]> returnList = new ArrayList<int[][]>();
 		// for 128 bits
 		String copyString = "";
+		// 
 		if(input.charAt(0) == '0')
 		{
 			copyString = "1";
@@ -630,14 +671,3 @@ public class AES
 		return returnMe;
 	}
 }
-/*
-if((i+1)%4 == 0 && i != 0)
-			{
-				m++;
-				l = 0;
-			}
-			else
-			{
-				l++;
-			}
-*/
