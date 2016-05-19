@@ -90,7 +90,6 @@ public class CAlgos
 			}
 			System.out.println();
 		}
-<<<<<<< HEAD
 
 		ArrayList<ArrayList<int[][]>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
 		// Jeremy's testing
@@ -109,7 +108,5 @@ public class CAlgos
 		// 	}
 		// 	System.out.println();
 		// }
-=======
->>>>>>> 12c97974e8313e25be3ce7c32985c63f47c4a742
 	}
 }
