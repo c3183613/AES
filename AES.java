@@ -137,8 +137,10 @@ public class AES
 			int[][] pGoingIn2 = new int[4][4];
 			int[][] pGoingIn3 = new int[4][4];
 			int[][] pGoingIn4 = new int[4][4];
-			for (int j = 0; j<4; j++) {
-				for (int k = 0; k<0; k++) {
+			for (int j = 0; j<4; j++) 
+			{
+				for (int k = 0; k<4; k++) 
+				{
 					pGoingIn0[j][k] = pTextIn.get(i)[j][k];
 					pGoingIn1[j][k] = pTextIn.get(i)[j][k];
 					pGoingIn2[j][k] = pTextIn.get(i)[j][k];
@@ -153,7 +155,7 @@ public class AES
 			AES4(pGoingIn4, keyShedule);
 		}
 
-		for (int i = 1; i<129; i++) {
+		for (int i = 0; i<129; i++) {
 			keyShedule = keyExpansion(kIn.get(i));
 			int[][] pGoingIn0 = new int[4][4];
 			int[][] pGoingIn1 = new int[4][4];
@@ -161,7 +163,7 @@ public class AES
 			int[][] pGoingIn3 = new int[4][4];
 			int[][] pGoingIn4 = new int[4][4];
 			for (int j = 0; j<4; j++) {
-				for (int k = 0; k<0; k++) {
+				for (int k = 0; k<4; k++) {
 					pGoingIn0[j][k] = pTextIn.get(0)[j][k];
 					pGoingIn1[j][k] = pTextIn.get(0)[j][k];
 					pGoingIn2[j][k] = pTextIn.get(0)[j][k];
@@ -354,6 +356,7 @@ public class AES
 
 	public static int[][] AES0SecondRun(int[][] in, ArrayList<int[][]> keyShedule)
 	{
+		data.get(0).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
@@ -390,6 +393,7 @@ public class AES
 
 	public static int[][] AES1SecondRun(int[][] in, ArrayList<int[][]> keyShedule)
 	{
+		data.get(11).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = shiftRows(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
@@ -423,6 +427,7 @@ public class AES
 
 	public static int[][] AES2SecondRun(int[][] in, ArrayList<int[][]> keyShedule)
 	{
+		data.get(22).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = mixColumns(preFirstRountState);
@@ -456,6 +461,7 @@ public class AES
 
 	public static int[][] AES3SecondRun(int[][] in, ArrayList<int[][]> keyShedule)
 	{
+		data.get(33).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
@@ -490,6 +496,7 @@ public class AES
 
 	public static int[][] AES4SecondRun(int[][] in, ArrayList<int[][]> keyShedule)
 	{
+		data.get(44).add(matrixToString(in));
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
 		preFirstRountState = subBytes(preFirstRountState);
 		preFirstRountState = shiftRows(preFirstRountState);
@@ -925,7 +932,6 @@ public class AES
 	public static ArrayList<int[][]> avFlipBit(String input)
 	{
 		ArrayList<int[][]> returnList = new ArrayList<int[][]>();
-		returnList.add(stringToArray(input));
 		// for 128 bits
 		String original = input;
 		returnList.add(stringToArray(original));
