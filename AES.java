@@ -84,7 +84,8 @@ public class AES
 	public static int[][] encrypt(int[][] in, ArrayList<int[][]> keyShedule)
 	{
 		int[][] preFirstRountState = xor(in, keyShedule.get(0));
-		for (int i = 0; i<9; i++) {
+		for (int i = 0; i<9; i++) 
+		{
 			preFirstRountState = subBytes(preFirstRountState);
 			preFirstRountState = shiftRows(preFirstRountState);
 			preFirstRountState = mixColumns(preFirstRountState);
@@ -918,16 +919,18 @@ public class AES
 
 	/*
 		Input: 128 bit String
-		Output: ArrayList of type int[][] which
+		Output: ArrayList of size 129 of type int[][] which changes the original 
+		string by 1 bit each time. The first element is the input
 	*/
 	public static ArrayList<int[][]> avFlipBit(String input)
 	{
 		ArrayList<int[][]> returnList = new ArrayList<int[][]>();
+		returnList.add(stringToArray(input));
 		// for 128 bits
 		String original = input;
 		returnList.add(stringToArray(original));
 		String copyString = "";
-		// 
+		// first bit altered
 		if(input.charAt(0) == '0')
 		{
 			copyString = "1";
@@ -938,8 +941,9 @@ public class AES
 			copyString="0";
 			copyString+=input.substring(1);	
 		}
-		// System.out.println("this is what i'm looking for: "+copyString);
+		// add to returnList after it is turned in to 4x4 array
 		returnList.add(stringToArray(copyString));
+		// for all of the other remaining bits other than the last one
 		for(int i=1;i<127;i++)
 		{
 			// change the bit at i
@@ -955,9 +959,10 @@ public class AES
 				copyString+="0";
 				copyString+= input.substring(i+1);
 			}
-			// System.out.println(copyString);
+			// add to returnList
 			returnList.add(stringToArray(copyString));
 		}
+		// alter the last bit
 		if(input.charAt(127) == '0')
 		{
 			copyString = input.substring(0,127);
@@ -968,6 +973,7 @@ public class AES
 			copyString = input.substring(0,127);
 			copyString+="0";
 		}
+		// add to returnList
 		returnList.add(stringToArray(copyString));
 		return returnList;
 	}
@@ -980,7 +986,6 @@ public class AES
 		String origInput = input;
 		String word = "";
 		int l = 0; int m = 0;
-		// returnMe[0][1] - row 1 column 0
 		for (int i = 0; i<16; i++) 
 		{
 			word = "";

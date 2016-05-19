@@ -97,4 +97,17 @@ public abstract class JAlgos
 		}
 		return returnArray;
 	}
+
+	public static String matrixToString(int[][] input)
+	{
+		String s ="";
+		for(int i=0;i<input.length;i++)
+		{
+			for(int j=0; j<input[i].length;j++)
+			{
+				s+=Integer.toBinaryString(input[j][i]);
+			}
+		}
+		return s;
+	}
 }
