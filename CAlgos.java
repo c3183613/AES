@@ -74,10 +74,11 @@ public class CAlgos
 				ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);
 				ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy);
 				// Print out the hexadecimal representation of each array element in a cube
-				long startTime = System.nanoTime();
+				// long startTime = System.nanoTime();
+				long startTime = System.currentTimeMillis();
 				// encrypt the input using the key given
 				int[][] output = AES.encrypt(input, keyShedule);
-				long duration = (System.nanoTime() - startTime);
+				long duration = (System.currentTimeMillis() - startTime);
 				ArrayList<ArrayList<String>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
 				float firstCount = 0;
 				float secondCount = 0;
@@ -127,7 +128,7 @@ public class CAlgos
 				System.out.println("Plaintext P: \t" + AES.matrixToString(input));
 				System.out.println("Key K: \t\t" + AES.matrixToString(key));
 				System.out.println("Ciphertext C: \t" + AES.matrixToString(output));
-				System.out.println("Running Time: \t"+duration+"ns");
+				System.out.println("Running Time: \t"+duration+"ms");
 				System.out.println("Avalanche:\nP and Pi under K");
 				System.out.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
 				for(int i = 0; i<aES0List.size();i++)
