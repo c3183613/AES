@@ -131,21 +131,24 @@ public class CAlgos
 					writeToFile = new PrintWriter("output.txt", "UTF-8");
 					writeToFile.println("ENCRYPTION");
 					writeToFile.println("Plaintext P: \t" + AES.matrixToString(input));
-					writeToFile.println("Key K: \t\t" + AES.matrixToString(key));
+					writeToFile.println("Key K: \t\t\t" + AES.matrixToString(key));
 					writeToFile.println("Ciphertext C: \t" + AES.matrixToString(output));
 					writeToFile.println("Running Time: \t"+duration+"ms");
 					writeToFile.println("Avalanche:\nP and Pi under K");
 					writeToFile.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
-					for(int i = 0; i<aES0List.size();i++)
+					for(int i = 0; i<aES0List.size()-1;i++)
 					{
-						writeToFile.println("  " + i + "\t\t" + aES0List.get(i) + "\t" + aES1List.get(i) + "\t" + aES2List.get(i) + "\t" + aES3List.get(i) + "\t" + aES4List.get(i));
+						writeToFile.println("  " + i + "\t\t\t" + aES0List.get(i) + "\t\t" + aES1List.get(i) + "\t\t" + aES2List.get(i) + "\t\t" + aES3List.get(i) + "\t\t" + aES4List.get(i));
 					}
+						writeToFile.println("  10\t\t" + aES0List.get(10) + "\t\t" + aES1List.get(10) + "\t\t" + aES2List.get(10) + "\t\t" + aES3List.get(10) + "\t\t" + aES4List.get(10));
+
 					writeToFile.println("P under K and Ki");
 					writeToFile.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
-					for(int i = 0; i<aES0List.size();i++)
+					for(int i = 0; i<aES0List.size()-1;i++)
 					{
-						writeToFile.println("  " + i + "\t\t" + aES0ListSecond.get(i) + "\t" + aES1ListSecond.get(i) + "\t" + aES2ListSecond.get(i) + "\t" + aES3ListSecond.get(i) + "\t" + aES4ListSecond.get(i));
+						writeToFile.println("  " + i + "\t\t\t" + aES0ListSecond.get(i) + "\t\t" + aES1ListSecond.get(i) + "\t\t" + aES2ListSecond.get(i) + "\t\t" + aES3ListSecond.get(i) + "\t\t" + aES4ListSecond.get(i));
 					}
+					writeToFile.println("  10\t\t" + aES0ListSecond.get(10) + "\t\t" + aES1ListSecond.get(10) + "\t\t" + aES2ListSecond.get(10) + "\t\t" + aES3ListSecond.get(10) + "\t\t" + aES4ListSecond.get(10));
 					writeToFile.close();
 				}
 				catch(Exception e)
@@ -161,7 +164,7 @@ public class CAlgos
 					int[][] decrypted = AES.decrypt(input, keyShedule);
 					writeToFile.println("DECRYPTION");
 					writeToFile.println("Ciphertext C: \t"+binaryInCopy);
-					writeToFile.println("Key K: \t\t"+keyInCopy);
+					writeToFile.println("Key K: \t\t\t"+keyInCopy);
 					writeToFile.println("Plaintext P: \t"+AES.matrixToString(decrypted));
 					writeToFile.close();
 				}
