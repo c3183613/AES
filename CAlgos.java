@@ -2,6 +2,7 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class CAlgos
 {
@@ -69,6 +70,7 @@ public class CAlgos
 			}
 			ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
 			keyShedule = AES.keyExpansion(key);
+			PrintWriter writeToFile = null;
 			if(eOrD.equals("E") || eOrD.equals("e"))
 			{
 				ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);
@@ -124,31 +126,49 @@ public class CAlgos
 					else if(j < 55)
 						aES4ListSecond.add(new Integer(Math.round(secondCount/128)));
 				}
-				System.out.println("\nENCRYPTION");
-				System.out.println("Plaintext P: \t" + AES.matrixToString(input));
-				System.out.println("Key K: \t\t" + AES.matrixToString(key));
-				System.out.println("Ciphertext C: \t" + AES.matrixToString(output));
-				System.out.println("Running Time: \t"+duration+"ms");
-				System.out.println("Avalanche:\nP and Pi under K");
-				System.out.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
-				for(int i = 0; i<aES0List.size();i++)
+				try
 				{
-					System.out.println("  " + i + "\t\t" + aES0List.get(i) + "\t" + aES1List.get(i) + "\t" + aES2List.get(i) + "\t" + aES3List.get(i) + "\t" + aES4List.get(i));
+					writeToFile = new PrintWriter("output.txt", "UTF-8");
+					writeToFile.println("ENCRYPTION");
+					writeToFile.println("Plaintext P: \t" + AES.matrixToString(input));
+					writeToFile.println("Key K: \t\t" + AES.matrixToString(key));
+					writeToFile.println("Ciphertext C: \t" + AES.matrixToString(output));
+					writeToFile.println("Running Time: \t"+duration+"ms");
+					writeToFile.println("Avalanche:\nP and Pi under K");
+					writeToFile.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
+					for(int i = 0; i<aES0List.size();i++)
+					{
+						writeToFile.println("  " + i + "\t\t" + aES0List.get(i) + "\t" + aES1List.get(i) + "\t" + aES2List.get(i) + "\t" + aES3List.get(i) + "\t" + aES4List.get(i));
+					}
+					writeToFile.println("P under K and Ki");
+					writeToFile.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
+					for(int i = 0; i<aES0List.size();i++)
+					{
+						writeToFile.println("  " + i + "\t\t" + aES0ListSecond.get(i) + "\t" + aES1ListSecond.get(i) + "\t" + aES2ListSecond.get(i) + "\t" + aES3ListSecond.get(i) + "\t" + aES4ListSecond.get(i));
+					}
+					writeToFile.close();
 				}
-				System.out.println("P under K and Ki");
-				System.out.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
-				for(int i = 0; i<aES0List.size();i++)
+				catch(Exception e)
 				{
-					System.out.println("  " + i + "\t\t" + aES0ListSecond.get(i) + "\t" + aES1ListSecond.get(i) + "\t" + aES2ListSecond.get(i) + "\t" + aES3ListSecond.get(i) + "\t" + aES4ListSecond.get(i));
+					e.printStackTrace();
 				}
 			}
 			else if(eOrD.equals("d") || eOrD.equals("D"))
 			{
-				int[][] decrypted = AES.decrypt(input, keyShedule);
-				System.out.println("DECRYPTION");
-				System.out.println("Ciphertext C: \t"+binaryInCopy);
-				System.out.println("Key K: \t\t"+keyInCopy);
-				System.out.println("Plaintext P: \t"+AES.matrixToString(decrypted));
+				try
+				{
+					writeToFile = new PrintWriter("output.txt", "UTF-8");
+					int[][] decrypted = AES.decrypt(input, keyShedule);
+					writeToFile.println("DECRYPTION");
+					writeToFile.println("Ciphertext C: \t"+binaryInCopy);
+					writeToFile.println("Key K: \t\t"+keyInCopy);
+					writeToFile.println("Plaintext P: \t"+AES.matrixToString(decrypted));
+					writeToFile.close();
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 			else
 			{
