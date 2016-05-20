@@ -1,4 +1,9 @@
-
+/******************************************************************************************************************************
+// Application for COMP3260 assignment 2
+// Programmers: Chris O'Donnell (c3165328) and Jeremy Law(c3183613)
+// Date Completed: 20/5/2016
+// Purpose of class: Main Class which takes input, encrypts or decrypts, and outputs to a file called "output.txt"
+*******************************************************************************************************************************/
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -12,81 +17,73 @@ public class Application
 	// encrypts and prints encrypted plaintext, decrypts and prints plaintext
 	public static void main(String[] args) throws FileNotFoundException
 	{
-		String eOrD = args[0];
-		Scanner fileScanner = null;
+		String eOrD = args[0];														// store argument 0 
+		Scanner fileScanner = null;													// initialize a new Scanner
 		try
 		{
-			fileScanner = new Scanner(new File(args[1]));
+			fileScanner = new Scanner(new File(args[1]));							// instantiate a new scanner with input file
 
 		}
-		catch(FileNotFoundException fnfe)
+		catch(FileNotFoundException fnfe)											// throw file not found exception
 		{
-			System.out.println("File not found!");
+			System.out.println("File not found!");									// print "File not found!"
 		}
 		finally
 		{
 			// take input
-			String binaryIn = fileScanner.nextLine();
-			String binaryInCopy = binaryIn;
+			String binaryIn = fileScanner.nextLine();								// Store first line of input file
+			String binaryInCopy = binaryIn;											// Create a copy of binaryIn
 			// take key
-			String keyIn = fileScanner.nextLine();
-			String keyInCopy = keyIn;
+			String keyIn = fileScanner.nextLine();									// Store second line of input file
+			String keyInCopy = keyIn;												// Create a copy of keyIn
 			// initialization 
-			int[][] input = new int[4][4];
-			int[][] key = new int[4][4];
-			// used to keep track of x and y values of 2d array
-			int l = 0, m = 0;
+			int[][] input = new int[4][4];											// Initialize a 4x4 array for input
+			int[][] key = new int[4][4];											// Initialize a 4x4 array for key
+			int l = 0, m = 0;														// used to keep track of x and y values of 2d array
 			// do this for 16 bytes
 			for (int i = 0; i<16; i++) 
 			{
-				// System.out.println(l + " " + m);
 				String in = "";
-				// add the first character of binaryIn to 'in' and 
-				// remove it from original string
-				// 8 times for 8 bits = 1 byte
+				for (int j = 0; j<8; j++)											// 8 times for 8 bits = 1 byte
+				{
+					in += binaryIn.charAt(0);										// Add the first character of binaryIn to 'in'
+					binaryIn = binaryIn.substring(1);								// Remove first character from original string
+				}
+				String keyWordIn = "";												// Instantiate new string for key
 				for (int j = 0; j<8; j++) 
 				{
-					in += binaryIn.charAt(0);
-					binaryIn = binaryIn.substring(1);
+					keyWordIn += keyIn.charAt(0);									// Add the first character of keyIn to 'keyWordIn'
+					keyIn = keyIn.substring(1);										// Remove first character of original string
 				}
-				String keyWordIn = "";
-				// do the same for the key
-				for (int j = 0; j<8; j++) 
+				input[l][m] = Integer.parseInt(in, 2);								// turn decimal representation of in into a binary number
+				key[l][m] = Integer.parseInt(keyWordIn, 2);							// turn decimal representation of keyWordIn into a binary number
+				if((i+1)%4 == 0 && i != 0)											// keep track of which index we are at in the 2d array
 				{
-					keyWordIn += keyIn.charAt(0);
-					keyIn = keyIn.substring(1);
-				}
-				// in is a binary number, turn it into a decimal number
-				input[l][m] = Integer.parseInt(in, 2);
-				key[l][m] = Integer.parseInt(keyWordIn, 2);
-				// keep track of which index we are at in the 2d array
-				if((i+1)%4 == 0 && i != 0)
-				{
-					m++;
-					l = 0;
+					m++;															// go to next column
+					l = 0;															// reset row count
 				}
 				else
 				{
-					l++;
+					l++;															// go to next row
 				}
 			}
-			ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();
-			keyShedule = AES.keyExpansion(key);
-			PrintWriter writeToFile = null;
-			if(eOrD.equals("E") || eOrD.equals("e"))
+			ArrayList<int[][]> keyShedule = new ArrayList<int[][]>();				// Instantiate a new ArrayList of type int[][]
+			keyShedule = AES.keyExpansion(key);										// perform keyExpansion on key
+			PrintWriter writeToFile = null;											// Initialize PrintWriter type to null
+			if(eOrD.equals("E") || eOrD.equals("e"))								// if args[0] is equal to upper or lower case for of e, enter scope
 			{
-				ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);
-				ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy);
+				ArrayList<int[][]> whatDoInput	 = AES.avFlipBit(binaryInCopy);		// perform avalanche flip bit for binaryInCopy and create ArrayList to store it
+				ArrayList<int[][]> whatDoKey	 = AES.avFlipBit(keyInCopy);		// perform avalanche flip bit for keyInCopy and create ArrayList to store it
 				// Print out the hexadecimal representation of each array element in a cube
-				// long startTime = System.nanoTime();
-				long startTime = System.currentTimeMillis();
+				long startTime = System.currentTimeMillis();						// Store the current time as a long to use late
 				// encrypt the input using the key given
-				int[][] output = AES.encrypt(input, keyShedule);
-				long duration = (System.currentTimeMillis() - startTime);
-				ArrayList<ArrayList<String>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);
-				float firstCount = 0;
-				float secondCount = 0;
-				ArrayList<Integer> aES0List = new ArrayList<Integer>();
+				int[][] output = AES.encrypt(input, keyShedule);					// encrypt input using keyShedule
+				long duration = (System.currentTimeMillis() - startTime);			// subtract current time from startTime to get running time of encryption
+				ArrayList<ArrayList<String>> data = AES.generateAvalancheData(whatDoInput, whatDoKey);			// generate avalanche data using whatDoInput and whatDoKey
+																												// which returns type ArrayList<ArrayList<String>> 
+				float firstCount = 0;												// Instantiate new float
+				float secondCount = 0;												// Instantiate new float
+				ArrayList<Integer> aES0List = new ArrayList<Integer>();				// Create new ArrayLists for Avalanche data
 				ArrayList<Integer> aES1List = new ArrayList<Integer>();
 				ArrayList<Integer> aES2List = new ArrayList<Integer>();
 				ArrayList<Integer> aES3List = new ArrayList<Integer>();
@@ -96,14 +93,14 @@ public class Application
 				ArrayList<Integer> aES2ListSecond = new ArrayList<Integer>();
 				ArrayList<Integer> aES3ListSecond = new ArrayList<Integer>();
 				ArrayList<Integer> aES4ListSecond = new ArrayList<Integer>();
-				for (int j = 0; j<55; j++) 
+				for (int j = 0; j<55; j++) 											// run for 55 times ()
 				{
-					firstCount = secondCount = 0;
-					for (int i = 1; i<129; i++) 
+					firstCount = secondCount = 0;									// Reset counts 
+					for (int i = 1; i<129; i++) 									// get summation of different bits
 					{
 						firstCount += AES.bitsDifferent(data.get(j).get(0), data.get(j).get(i));
 					}
-					if(j < 11)
+					if(j < 11)														// take average 
 						aES0List.add(new Integer(Math.round(firstCount/128)));
 					else if(11 <= j && j < 22)
 						aES1List.add(new Integer(Math.round(firstCount/128)));
@@ -113,10 +110,10 @@ public class Application
 						aES3List.add(new Integer(Math.round(firstCount/128)));
 					else if(j < 55)
 						aES4List.add(new Integer(Math.round(firstCount/128)));
-					for (int i = 130; i<258; i++) 
+					for (int i = 130; i<258; i++) 									// add all different bits
 					{
 						secondCount += AES.bitsDifferent(data.get(j).get(0), data.get(j).get(i));
-					}
+					}																// take average
 					if(j < 11)
 						aES0ListSecond.add(new Integer(Math.round(secondCount/128)));
 					else if(11 <= j && j < 22)
