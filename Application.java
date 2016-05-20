@@ -1,3 +1,5 @@
+
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.io.File;
@@ -144,7 +146,7 @@ public class Application
 					writeToFile.println("Round\t\tAES0\tAES1\tAES2\tAES3\tAES4");
 					for(int i = 0; i<aES0List.size()-1;i++)
 					{
-						writeToFile.println("  " + i + "\t\t\t" + aES0ListSecond.get(i) + "\t" + aES1ListSecond.get(i) + "\t" + aES2ListSecond.get(i) + "\t" + aES3ListSecond.get(i) + "\t" + aES4ListSecond.get(i));
+						writeToFile.println("  " + i + "\t\t" + aES0ListSecond.get(i) + "\t" + aES1ListSecond.get(i) + "\t" + aES2ListSecond.get(i) + "\t" + aES3ListSecond.get(i) + "\t" + aES4ListSecond.get(i));
 					}
 					writeToFile.close();
 				}
