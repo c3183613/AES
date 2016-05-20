@@ -1026,4 +1026,16 @@ public class AES
 		}
 		return s;
 	}
+
+	public static int bitsDifferent(String s1, String s2)
+	{
+		int count = 0;
+		for (int i = 0; i<128; i++) {
+			if(s1.charAt(i) != s2.charAt(i))
+			{
+				count++;
+			}
+		}
+		return count;
+	}
 }
