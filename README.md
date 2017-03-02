@@ -1,3 +1,3 @@
-# COMP3260A2
+# AES
 JLaw and COdonnell
-Git repository for COMP3260 Assignment 2
+Git repository for AES project
